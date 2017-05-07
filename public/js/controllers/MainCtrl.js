@@ -29,10 +29,12 @@ angular.module('MainCtrl', []).controller('MainController', function($scope) {
 	$("#text").
 	on("blur", function () {
 		makeCode();
+		console.log("Making change on blur");
 	}).
 	on("keydown", function (e) {
 		if (e.keyCode == 13) {
 			makeCode();
+			console.log("Enter pressed");
 		}
 	});
 });
