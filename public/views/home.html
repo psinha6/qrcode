@@ -1,5 +1,14 @@
 <div class="jumbotron text-center">
-	<h1>Home Page 4 Life</h1>
-
-	<p>{{ tagline }}</p>
+<div ng-show="qrCode == undefined">
+	<img ng-src="{{qrCode}}" src="value">
+</div>
+<div>
+	<label>Select Class</label> <select ng-model="selectedName" ng-options="x for x in classNames"></select>
+	<p></p>
+	<label>Enter Syllabus Number</label>  <input type="text" ng-model="syllabusNo">
+	<p></p>
+	<label>Enter Content Section Value</label><input type="text" ng-model="contentId">
+</div>
+	<p></p>
+	<p> <button ng-click="download()">Download</button> </p>
 </div>
