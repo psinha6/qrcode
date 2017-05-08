@@ -1,9 +1,13 @@
-angular.module('MainCtrl', []).controller('MainController', function($scope) {
+angular.module('MainCtrl', []).controller('MainController', function($scope, $http) {
 
 	$("#qrgenerator").css("display", "block");
 	$scope.qrCode;
 	$scope.isQRGenerated = false;
 	$scope.classNames = ['1', '2', '3', '4', '5', '6', '7', '8'];
+
+    $scope.syllabusNo = 1100;
+    $scope.contentId = 1313;
+    $scope.className = 2;
 	//$scope.tagline = 'To the moon and back!';
 	$scope.generateQRCode = function(){
 		var error;
@@ -35,10 +39,21 @@ angular.module('MainCtrl', []).controller('MainController', function($scope) {
 	}
 
 	$scope.download = function(){
+        var src;
 		$('img.downloadable').each(function(){
 			var $this = $(this);
+            src = $this[0].src;
 			console.log($this[0].src);
 		});
+        $http({
+          method: 'POST',
+          url: '/saveImage',
+          data: {image: src}
+        }).then(function successCallback(response) {
+            console.log("Image saved successfully :: " + JSON.stringify(response));
+          }, function errorCallback(response) {
+            console.log("Error could not save image::" + JSON.stringify(response));
+          });
 	}
 	
 

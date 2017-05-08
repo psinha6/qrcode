@@ -4,7 +4,7 @@ var app            = express();
 var mongoose       = require('mongoose');
 var bodyParser     = require('body-parser');
 var methodOverride = require('method-override');
-
+var fs 			   = require('file-system');
 // configuration ===========================================
 	
 // config files
@@ -23,9 +23,30 @@ app.use(express.static(__dirname + '/public')); // set the static files location
 
 
 //GET POST request handling
-app.post('/saveToDB',function(req, resp){
-	
+app.post('/saveImage',function(req, resp){
+	console.log("image = " + req.body.image);
+
+	var base64Data = req.body.image;//.replace(/^data:image\/png;base64,/, "");
+	var imageBuffer = decodeBase64Image(base64Data);
+	fs.writeFile("out.png", base64Data, {encoding: 'base64'}, function(err) {
+	  console.log(" error = " + err);
+	});
+	resp.send("Hello");
 });
+
+function decodeBase64Image(dataString) {
+  var matches = dataString.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/),
+    response = {};
+
+  if (matches.length !== 3) {
+    return new Error('Invalid input string');
+  }
+
+  response.type = matches[1];
+  response.data = new Buffer(matches[2], 'base64');
+
+  return response;
+}
 // routes ==================================================
 require('./app/routes')(app); // pass our application into our routes
 
