@@ -1,5 +1,6 @@
 angular.module('NerdCtrl', []).controller('NerdController', function($scope) {
 
-	$scope.tagline = 'Nothing beats a pocket protector!';
+	$("#qrgenerator").css("display", "none");
+	$scope.tagline = '';
 
 });

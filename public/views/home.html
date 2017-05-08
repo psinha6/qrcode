@@ -1,16 +1,25 @@
-<div class="jumbotron text-center">
+<!-- <div class="jumbotron text-center">
 <div ng-show="qrCode == undefined">
-	<!-- <img ng-src="{{qrCode}}" src="value"> -->
-	<div id="qrcode" style="width:100px; height:100px; margin-top:15px;"></div>
+	<img ng-src="{{qrCode}}" src="value">
+	<a id="qrcode" style="width:100px; height:100px; margin-top:15px;" download></a>
 </div>
 <div>
-	<label>Select Class</label> <select ng-model="selectedName" ng-options="x for x in classNames"></select>
+	<label>Select Class</label> <select ng-model="className" ng-options="x for x in classNames"></select>
 	<p></p>
 	<label>Enter Syllabus Number</label>  <input type="text" ng-model="syllabusNo">
 	<p></p>
 	<label>Enter Content Section Value</label><input type="text" ng-model="contentId">
 	<input id="text" type="text" value="http://nexteducation.com" style="width:80%" /><br />
 </div>
+<div>
+
+</div>
 	<p></p>
+	<p> <button ng-click="generateQRCode()">Generate</button> </p>
 	<p> <button ng-click="download()">Download</button> </p>
 </div>
+ -->
+
+ 	<label class="label label-success">Click on image to download</label>
+ 	<p>
+	<p> <button class ="btn-warning btn-lg" ng-click="download()">Save</button> </p>
