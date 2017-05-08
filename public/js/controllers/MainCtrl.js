@@ -2,9 +2,10 @@ angular.module('MainCtrl', []).controller('MainController', function($scope) {
 
 	$("#qrgenerator").css("display", "block");
 	$scope.qrCode;
+	$scope.isQRGenerated = false;
 	$scope.classNames = ['1', '2', '3', '4', '5', '6', '7', '8'];
 	//$scope.tagline = 'To the moon and back!';
-	$scope.download = function(){
+	$scope.generateQRCode = function(){
 		var error;
 		if(!$scope.syllabusNo){
 			error = "Please enter syllabus id";
@@ -28,13 +29,17 @@ angular.module('MainCtrl', []).controller('MainController', function($scope) {
 		var url = "www.nexteducation.com?syllabus=" + $scope.syllabusNo + "&csid=" + $scope.contentId;
 		console.log("URL::" + url);
 		$('#text').val(url);
+		
+		update();
+		$scope.isQRGenerated = true;
+	}
+
+	$scope.download = function(){
 		$('img.downloadable').each(function(){
 			var $this = $(this);
 			console.log($this[0].src);
 		});
-		update();
 	}
-
 	
 
 	var win = window; // eslint-disable-line no-undef

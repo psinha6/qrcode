@@ -29,4 +29,5 @@
 	</div>
  	<label class="label label-success control-label">Click on image to download</label>
  	<p>
-	<p> <button class ="btn-warning btn-lg" ng-click="download()">Save</button> </p>
+	<p> <button class ="btn-warning btn-lg" ng-click="generateQRCode()">Generate</button> </p>
+	<p> <button class ="btn-warning btn-lg" ng-click="download()" ng-show="isQRGenerated">Save</button> </p>
