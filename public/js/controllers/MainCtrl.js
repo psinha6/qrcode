@@ -5,13 +5,10 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
 	$scope.isQRGenerated = false;
 	$scope.classNames = ['1', '2', '3', '4', '5', '6', '7', '8'];
 
-    $scope.syllabusNo = 1100;
-    $scope.contentId = 1313;
-    $scope.className = 2;
 	//$scope.tagline = 'To the moon and back!';
 	$scope.generateQRCode = function(){
 		var error;
-		if(!$scope.syllabusNo){
+		/*if(!$scope.syllabusNo){
 			error = "Please enter syllabus id";
 		} else if(!$scope.contentId){
 			if(error){
@@ -30,14 +27,41 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
 			alert(error);
 			return;	
 		}
-		var url = "www.nexteducation.com?syllabus=" + $scope.syllabusNo + "&csid=" + $scope.contentId;
+		var url = "www.nextcurriculum.in/app/qrcode/";
 		console.log("URL::" + url);
 		$('#text').val(url);
 		
 		update();
 		$scope.isQRGenerated = true;
+		*/
+        if(!$scope.isQRGenerated == true){
+            $scope.imageid;
+		    var title = 'Grade' + $scope.className + 'syllabusNo' + $scope.syllabusNo + 'pageno' + $scope.pageNo;
+		    $http({
+              method: 'POST',
+              url: '/addToDatabase',
+              data: {image_title: title, image_description: $scope.description, image_pgno : $scope.pageNo}
+            }).then(function successCallback(response) {
+	        console.log("Image saved successfully :: " + JSON.stringify(response.data));
+            $scope.imageid = response.data[0].image_id;
+            var url = "www.nextcurriculum.in/app/qrcode/" + $scope.imageid;
+            console.log("URL::" + url);
+            $('#text').val(url);
+            $('#label').val($scope.pageNo);
+            update();
+            $scope.isQRGenerated = true;
+	        }, function errorCallback(response) {
+	           console.log("Error could not save image::" + JSON.stringify(response));
+	        });
+        } else {
+            update();
+        }
 	}
 
+    $scope.clear = function(){
+        $scope.isQRGenerated = false;
+        location.reload();
+    }
 	$scope.download = function(){
         var src;
 		$('img.downloadable').each(function(){
@@ -45,17 +69,17 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
             src = $this[0].src;
 			console.log($this[0].src);
 		});
+
         $http({
           method: 'POST',
           url: '/saveImage',
-          data: {image: src}
+          data: {image: src, image_id: $scope.imageid}
         }).then(function successCallback(response) {
             console.log("Image saved successfully :: " + JSON.stringify(response));
           }, function errorCallback(response) {
             console.log("Error could not save image::" + JSON.stringify(response));
           });
 	}
-	
 
 	var win = window; // eslint-disable-line no-undef
     var FR = win.FileReader;
@@ -151,9 +175,9 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
             container.appendChild(qrcode);
         }
         $('img.downloadable').each(function(){
-		var $this = $(this);
-		$this.wrap('<a href="' + $this.attr('src') + '" download />')
-	});
+    		var $this = $(this);
+    		$this.wrap('<a href="' + $this.attr('src') + '" download />')
+	    });
     }
 
     function update() {
