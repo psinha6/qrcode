@@ -27,11 +27,10 @@ app.post('/saveImage',function(req, resp){
 	console.log("image = " + req.body.image);
 
 	var base64Data = req.body.image;//.replace(/^data:image\/png;base64,/, "");
-	var imageBuffer = decodeBase64Image(base64Data);
-	fs.writeFile("out.png", base64Data, {encoding: 'base64'}, function(err) {
-	  console.log(" error = " + err);
-	});
-	resp.send("Hello");
+	var data = base64Data.replace(/^data:image\/\w+;base64,/, "");
+	var buf = new Buffer(data, 'base64');
+	fs.writeFile('image.png', buf);
+	resp.send();
 });
 
 function decodeBase64Image(dataString) {
