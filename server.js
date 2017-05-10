@@ -103,6 +103,9 @@ app.get('/showQRCodes', function(req, resp){
 	connection.query("SELECT * from qrImageTable", function(err, rows, fields) {
 	   	if (!err){
 	    	console.log('The solution is: ', rows);
+	    	var data = JSON.parse(rows);
+	    	var bufferBase64 = new Buffer( data[4].image, 'binary' ).toString('base64');
+	    	console.log("Image" + bufferBase64);
 	    	resp.send(rows);
 	   	}
 	    else{
