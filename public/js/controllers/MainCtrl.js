@@ -1,6 +1,7 @@
 angular.module('MainCtrl', []).controller('MainController', function($scope, $http) {
 
 	$("#qrgenerator").css("display", "block");
+    $("#container").css("display", "none");
 	$scope.qrCode;
 	$scope.isQRGenerated = false;
 	$scope.classNames = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'];

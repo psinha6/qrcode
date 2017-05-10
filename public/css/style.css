@@ -259,4 +259,5 @@ input::-webkit-slider-thumb {
   width: 150px;
   height: 150px;
   margin-right: 20px;
+  float: right;
 }

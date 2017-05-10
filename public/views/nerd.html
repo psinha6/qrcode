@@ -11,14 +11,15 @@
   	<div class="col-md-10 text-left">
   		<ul class="phones">
 	        <li ng-repeat="qrcode in qrcodes | filter:filterData" class="thumbnail phone-list-item">
-	          <a href="qrcode.path" class="thumb">
-	            <img src="{{qrcode.path}}" alt="{{qrcode.name}}" class="imageSmall"/>
-	          </a>
+	          
 	          <div>
 		          <a href="" class="block m-b-10">{{qrcode.image_title}}</a>
 		          <p class="m-b-10"> Description {{qrcode.image_description}}</p>
 		          <p class="m-b-10">Page No: {{qrcode.image_pgno}}</p>
 	          </div>
+	          <a href="{{qrcode.path}}" download>Download
+	            <!-- <img src="{{qrcode.path}}" alt="{{qrcode.name}}" class="imageSmall"/> -->
+	          </a>
 	        </li>
 	    </ul>
 	</div>
