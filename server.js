@@ -55,8 +55,16 @@ app.post('/saveImage',function(req, resp){
 	var base64Data = req.body.image;//.replace(/^data:image\/png;base64,/, "");
 	var data = base64Data.replace(/^data:image\/\w+;base64,/, "");
 	var buf = new Buffer(data, 'base64');
-	fs.writeFile(req.body.image_id'.png', buf);
-	resp.send("Hello");
+	fs.writeFile(req.body.image_id + '.png', buf);
+	// Saving the image in database
+	//var sql = "UPDATE qrImageTable SET image = " + data + "where image_id = " req.body.image_id;
+	connection.query('UPDATE qrImageTable SET ? WHERE ?', [{ image: buf }, { image_id: req.body.image_id }], function(err){
+		if(err){
+			console.log("Error occured while saving image in db" + err);
+		} else{
+			resp.send("Hello");
+		}
+	});
 });
 
 
@@ -71,7 +79,7 @@ app.post('/addToDatabase',function(req, resp){
 	connection.query(sql, function (err, result) {
 	    if (err){
 	    	console.log("Error " + err);
-	    	resp.status(400).send({data: result});
+	    	resp.status(400).send({data: err});
 	    	return;
 	    } else{
 	    	console.log("1 record inserted" + JSON.stringify(result));	
@@ -85,12 +93,25 @@ app.post('/addToDatabase',function(req, resp){
 			     	resp.status(400).send({data: err});
 			    }
 			   
-			});    	
+			});
 	    }
 	});
 	
 });
 
+app.get('/showQRCodes', function(req, resp){
+	connection.query("SELECT * from qrImageTable", function(err, rows, fields) {
+	   	if (!err){
+	    	console.log('The solution is: ', rows);
+	    	resp.send(rows);
+	   	}
+	    else{
+	     	console.log('Error while performing Query.' + err);
+	     	resp.status(400).send({data: err});
+	    }
+	   
+	});
+});
 // routes ==================================================
 require('./app/routes')(app); // pass our application into our routes
 
