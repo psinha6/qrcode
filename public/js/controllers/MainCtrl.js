@@ -3,7 +3,7 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
 	$("#qrgenerator").css("display", "block");
 	$scope.qrCode;
 	$scope.isQRGenerated = false;
-	$scope.classNames = ['1', '2', '3', '4', '5', '6', '7', '8'];
+	$scope.classNames = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'];
 
 	//$scope.tagline = 'To the moon and back!';
 	$scope.generateQRCode = function(){
@@ -34,6 +34,26 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
 		update();
 		$scope.isQRGenerated = true;
 		*/
+        // +++++++++++++++++++++++++++++++++ Validations begin +++++++++++++++++++++++++++++++++//
+        var error = "Please enter"
+        if(!$scope.className){
+            error += " class name";
+        }
+        if(!$scope.syllabusNo){
+            error += " subject name";
+        }
+        if(!$scope.pageNo){
+            error += " page number";
+        }
+        if(!$scope.description){
+            error += " description";
+        }
+        if(error.length > 12){
+            alert(error);
+            return;
+        }
+        console.log(error);
+        // +++++++++++++++++++++++++++++++++ Validations ends +++++++++++++++++++++++++++++++++//
         if(!$scope.isQRGenerated == true){
             $scope.imageid;
 		    var title = 'Grade' + $scope.className + 'syllabusNo' + $scope.syllabusNo + 'pageno' + $scope.pageNo;
@@ -52,15 +72,27 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
             $scope.isQRGenerated = true;
 	        }, function errorCallback(response) {
 	           console.log("Error could not save image::" + JSON.stringify(response));
+               if(response.data.data.code == "ER_DUP_ENTRY"){
+                    $scope.generalText = "Image not saved. Image with same name is already generated" ; 
+               } else {
+                    $scope.generalText = "Image not saved";
+               }
+               
 	        });
         } else {
             update();
         }
+        $("#container").css("display", "inline-block");
 	}
 
-    $scope.clear = function(){
+    $scope.createNew = function(){
         $scope.isQRGenerated = false;
-        location.reload();
+        $("#container").css("display", "none");
+        $scope.className = "";
+        $scope.syllabusNo = "";
+        $scope.pageNo = "";
+        $scope.description = "";
+        $scope.generalText = "";
     }
 	$scope.download = function(){
         var src;
@@ -76,8 +108,11 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
           data: {image: src, image_id: $scope.imageid}
         }).then(function successCallback(response) {
             console.log("Image saved successfully :: " + JSON.stringify(response));
+            $scope.generalText = "Image saved successfully";
+            $scope.createNew();
           }, function errorCallback(response) {
             console.log("Error could not save image::" + JSON.stringify(response));
+            $scope.generalText = "Image not saved";
           });
 	}
 
@@ -207,4 +242,55 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
         onEvent(win, 'load', update);
         update();
     });
+
+    var jsdata = [
+                    {"Syllabus": "1010853", "Subject": "English", "Class": "Nursery"},
+                    {"Syllabus": "1010590", "Subject": "English", "Class": "V"},
+                    {"Syllabus": "1010591", "Subject": "English", "Class": "LKG"},
+                    {"Syllabus": "1010850", "Subject": "English", "Class": "UKG"},
+                    {"Syllabus": "1010849", "Subject": "English", "Class": "II"},
+                    {"Syllabus": "1010852", "Subject": "English", "Class": "IV"},
+                    {"Syllabus": "1010851", "Subject": "English", "Class": "III"},
+                    {"Syllabus": "1010989", "Subject": "English", "Class": "VII"},
+                    {"Syllabus": "1010990", "Subject": "English", "Class": "VIII"},
+                    {"Syllabus": "1010988", "Subject": "English", "Class": "VI"},
+                    {"Syllabus": "1010157", "Subject": "Maths", "Class": "LKG"},
+                    {"Syllabus": "1010152", "Subject": "Maths", "Class": "Nursery"},
+                    {"Syllabus": "1010162", "Subject": "Maths", "Class": "UKG"},
+                    {"Syllabus": "1009416", "Subject": "Maths", "Class": "I"},
+                    {"Syllabus": "1012412", "Subject": "Maths", "Class": "VII"},
+                    {"Syllabus": "1012411", "Subject": "Maths", "Class": "VI"},
+                    {"Syllabus": "1009417", "Subject": "Maths", "Class": "II"},
+                    {"Syllabus": "1012413", "Subject": "Maths", "Class": "VIII"},
+                    {"Syllabus": "1009418", "Subject": "Maths", "Class": "III"},
+                    {"Syllabus": "1009419", "Subject": "Maths", "Class": "IV"},
+                    {"Syllabus": "1009420", "Subject": "Maths", "Class": "V"},
+                    {"Syllabus": "1012357", "Subject": "Science", "Class": "II"},
+                    {"Syllabus": "1012355", "Subject": "Science", "Class": "I"},
+                    {"Syllabus": "1010604", "Subject": "Science", "Class": "V"},
+                    {"Syllabus": "1010603", "Subject": "Science", "Class": "IV"},
+                    {"Syllabus": "1010602", "Subject": "Science", "Class": "III"},
+                    {"Syllabus": "1012358", "Subject": "Social Studies", "Class": "II"},
+                    {"Syllabus": "1012356", "Subject": "Social Studies", "Class": "I"},
+                    {"Syllabus": "1010607", "Subject": "Social Studies", "Class": "V"},
+                    {"Syllabus": "1010606", "Subject": "Social Studies", "Class": "IV"},
+                    {"Syllabus": "1010605", "Subject": "Social Studies", "Class": "III"},
+                    {"Syllabus": "1010600", "Subject": "EVS", "Class": "IV"},
+                    {"Syllabus": "1010599", "Subject": "EVS", "Class": "III"},
+                    {"Syllabus": "1010598", "Subject": "EVS", "Class": "II"},
+                    {"Syllabus": "1010597", "Subject": "EVS", "Class": "I"},
+                    {"Syllabus": "1010601", "Subject": "EVS", "Class": "V"},
+                    {"Syllabus": "1010843", "Subject": "Hindi", "Class": "V"},
+                    {"Syllabus": "1010841", "Subject": "Hindi", "Class": "III"},
+                    {"Syllabus": "1010842", "Subject": "Hindi", "Class": "IV"},
+                    {"Syllabus": "1010839", "Subject": "Hindi", "Class": "I"},
+                    {"Syllabus": "1010840", "Subject": "Hindi", "Class": "II"},
+                    {"Syllabus": "1012408", "Subject": "Hindi", "Class": "VI"},
+                    {"Syllabus": "1012410", "Subject": "Hindi", "Class": "VIII"},
+                    {"Syllabus": "1012409", "Subject": "Hindi", "Class": "VII"},
+                    {"Syllabus": "1010869", "Subject": "Hindi", "Class": "UKG"},
+                    {"Syllabus": "1010868", "Subject": "Hindi", "Class": "LKG"}
+                ];
+
+    $scope.subjects = ["Hindi", "EVS", "Social_Studies", "Science", "Maths", "English"];
 });

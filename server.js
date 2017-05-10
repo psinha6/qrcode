@@ -103,10 +103,24 @@ app.get('/showQRCodes', function(req, resp){
 	connection.query("SELECT * from qrImageTable", function(err, rows, fields) {
 	   	if (!err){
 	    	console.log('The solution is: ', rows);
-	    	var data = JSON.parse(rows);
+	    	for(var i=0; i < rows.length; i++){
+	    		//bufferBase64 += new Buffer( rows[i].image, 'binary' ).toString('base64');
+	    		fs.writeFile('public/img/' + rows[i].image_id + '.png', rows[i].image);
+	    		if(rows[i].image){
+	    			rows[i].path = '../img/' + rows[i].image_id + '.png';
+	    			rows[i].image = "";
+	    		} else {
+	    			rows[i].path = "null";
+	    		}
+	    	}
+	    	/*var data = JSON.parse(rows);
 	    	var bufferBase64 = new Buffer( data[4].image, 'binary' ).toString('base64');
-	    	console.log("Image" + bufferBase64);
-	    	resp.send(rows);
+	    	console.log("Image" + bufferBase64);*/
+	    	resp.send(JSON.stringify(rows));
+	    	console.log(rows);
+	    	/*var bufferBase64 = 'data:image/jpeg;base64,';
+	    	bufferBase64 += new Buffer( rows[21].image, 'binary' ).toString('base64');
+	    	fs.writeFile('prateekbuf.png', rows[21].image);*/
 	   	}
 	    else{
 	     	console.log('Error while performing Query.' + err);
