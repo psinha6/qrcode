@@ -1,4 +1,4 @@
-angular.module('NerdCtrl', []).controller('NerdController', function($scope, $http, NerdService) {
+angular.module('NerdCtrl', []).controller('NerdController', function($scope, $http, Nerd) {
 
 	$("#qrgenerator").css("display", "none");
 
