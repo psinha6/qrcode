@@ -30,11 +30,11 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
         // +++++++++++++++++++++++++++++++++ Validations ends +++++++++++++++++++++++++++++++++//
         if(!$scope.isQRGenerated == true){
             $scope.imageid;
-		    var title = 'Grade' + $scope.className + 'syllabusNo' + $scope.syllabusNo + 'pageno' + $scope.pageNo;
+		    $scope.title = 'Grade' + $scope.className + 'Subject' + $scope.syllabusNo + 'PgNo' + $scope.pageNo;
 		    $http({
               method: 'POST',
               url: '/addToDatabase',
-              data: {image_title: title, image_description: $scope.description, image_pgno : $scope.pageNo}
+              data: {image_title: $scope.title, image_description: $scope.description, image_pgno : $scope.pageNo}
             }).then(function successCallback(response) {
 	        console.log("Image saved successfully :: " + JSON.stringify(response.data));
             $scope.imageid = response.data[0].image_id;
@@ -60,6 +60,10 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
 	}
 
     $scope.createNew = function(){
+        if($scope.title){
+            alert("Please save image");
+            return;
+        }
         $scope.isQRGenerated = false;
         $("#container").css("display", "none");
         $scope.className = "";
@@ -75,14 +79,15 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
             src = $this[0].src;
 			console.log($this[0].src);
 		});
-
+        console.log("title of image" + $scope.title);
         $http({
           method: 'POST',
           url: '/saveImage',
-          data: {image: src, image_id: $scope.imageid}
+          data: {image: src, image_id: $scope.imageid, image_title : $scope.title}
         }).then(function successCallback(response) {
             console.log("Image saved successfully :: " + JSON.stringify(response));
             $scope.generalText = "Image saved successfully";
+            $scope.title = "";
             $scope.createNew();
           }, function errorCallback(response) {
             console.log("Error could not save image::" + JSON.stringify(response));

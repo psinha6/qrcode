@@ -1,3 +1,9 @@
-<div class="jumbotron text-center">
-	<p>{{tagline}}</p>
+<div class="phone-images" ng-init="getQRDetails()">
+  <img ng-src="{{img}}" class="phone"
+      ng-class="{selected: img === $ctrl.mainImageUrl}"
+      ng-repeat="img in $ctrl.phone.images" />
 </div>
+
+<h1>{{$ctrl.phone.name}}</h1>
+
+<p>{{$ctrl.phone.description}}</p>

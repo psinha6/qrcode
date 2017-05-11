@@ -50,12 +50,12 @@ app.use(express.static(__dirname + '/public')); // set the static files location
 
 //GET POST request handling
 app.post('/saveImage',function(req, resp){
-	console.log("image = " + req.body.image);
+	console.log("image image_title= " + req.body.image_title);
 
 	var base64Data = req.body.image;//.replace(/^data:image\/png;base64,/, "");
 	var data = base64Data.replace(/^data:image\/\w+;base64,/, "");
 	var buf = new Buffer(data, 'base64');
-	fs.writeFile(req.body.image_id + '.png', buf);
+	fs.writeFile('public/img/' + req.body.image_title + '.png', buf);
 	// Saving the image in database
 	//var sql = "UPDATE qrImageTable SET image = " + data + "where image_id = " req.body.image_id;
 	connection.query('UPDATE qrImageTable SET ? WHERE ?', [{ image: buf }, { image_id: req.body.image_id }], function(err){
@@ -68,9 +68,8 @@ app.post('/saveImage',function(req, resp){
 });
 
 
-app.post('/addToDatabase',function(req, resp){
-	console.log("image = " + req.body.image);
 
+app.post('/addToDatabase',function(req, resp){
 	var dataObject = req.body;
 	
 	var sql = "INSERT INTO qrImageTable (image_title, image_description, image_pgno) values ('" + dataObject.image_title + "','" + dataObject.image_description + "','" + dataObject.image_pgno + "')";
@@ -105,22 +104,47 @@ app.get('/showQRCodes', function(req, resp){
 	    	console.log('The solution is: ', rows);
 	    	for(var i=0; i < rows.length; i++){
 	    		//bufferBase64 += new Buffer( rows[i].image, 'binary' ).toString('base64');
-	    		fs.writeFile('public/img/' + rows[i].image_id + '.png', rows[i].image);
+	    		console.log("title::" + rows[i].image_title)
+	    		fs.writeFile('public/img/' + rows[i].image_title + '.png', rows[i].image);
 	    		if(rows[i].image){
-	    			rows[i].path = '../img/' + rows[i].image_id + '.png';
+	    			rows[i].path = '../img/' + rows[i].image_title + '.png';
 	    			rows[i].image = "";
 	    		} else {
 	    			rows[i].path = "null";
 	    		}
 	    	}
-	    	/*var data = JSON.parse(rows);
-	    	var bufferBase64 = new Buffer( data[4].image, 'binary' ).toString('base64');
-	    	console.log("Image" + bufferBase64);*/
 	    	resp.send(JSON.stringify(rows));
 	    	console.log(rows);
-	    	/*var bufferBase64 = 'data:image/jpeg;base64,';
-	    	bufferBase64 += new Buffer( rows[21].image, 'binary' ).toString('base64');
-	    	fs.writeFile('prateekbuf.png', rows[21].image);*/
+	   	}
+	    else{
+	     	console.log('Error while performing Query.' + err);
+	     	resp.status(400).send({data: err});
+	    }
+	   
+	});
+});
+
+
+app.get('/getImageDetails', function(req, resp){
+	console.log("query" + JSON.stringify(req.query));
+	console.log("params" + JSON.stringify(req.params));
+	var dataObject = req.query;
+	console.log("Image title ::" + dataObject.image_title);
+	var sql = "SELECT * from qrImageTable where image_title='" + dataObject.image_title + "'";
+	connection.query(sql, function(err, rows, fields) {
+	   	if (!err){
+	    	console.log('The solution is: ', rows);
+	    	for(var i=0; i < rows.length; i++){
+	    		fs.writeFile('public/img/' + rows[i].image_title + '.png', rows[i].image);
+	    		if(rows[i].image){
+	    			rows[i].path = '../img/' + rows[i].image_title + '.png';
+	    			rows[i].image = "";
+	    		} else {
+	    			rows[i].path = "null";
+	    		}
+	    	}
+	    	resp.send(JSON.stringify(rows));
+	    	console.log(rows);
 	   	}
 	    else{
 	     	console.log('Error while performing Query.' + err);

@@ -1,4 +1,4 @@
-angular.module('NerdCtrl', []).controller('NerdController', function($scope, $http, Nerd) {
+angular.module('NerdCtrl', []).controller('NerdController', function($scope, $http, Nerd, $location) {
 
 	$("#qrgenerator").css("display", "none");
 
@@ -18,6 +18,7 @@ angular.module('NerdCtrl', []).controller('NerdController', function($scope, $ht
     console.log(desc);
     Nerd.imageid = desc;
     Nerd.printImageId();
+    $location.path( 'geeks' );
   }
 	$scope.tagline = '';
 
