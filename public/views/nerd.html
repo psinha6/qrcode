@@ -16,12 +16,15 @@
 		          <a href="" class="block m-b-10">{{qrcode.image_title}}</a>
 		          <p class="m-b-10"> Description {{qrcode.image_description}}</p>
 		          <p class="m-b-10">Page No: {{qrcode.image_pgno}}</p>
+		          <a href="{{qrcode.path}}" download="{{qrcode.image_title}}">Download
+	            		<!-- <img src="{{qrcode.path}}" alt="{{qrcode.name}}" class="imageSmall"/> -->
+	          	  </a>
 	          </div>
-	          <a href="{{qrcode.path}}" download>Download
-	            <!-- <img src="{{qrcode.path}}" alt="{{qrcode.name}}" class="imageSmall"/> -->
-	          </a>
+	          <div style="width: 30px;height: 30px; float: right;" ng-click="addMappingToImage(qrcode.image_title)">
+	          	<img src="../img/add.png" alt="add mapping" style="width: 100%; height: 100%" />
+	          </div>
 	        </li>
 	    </ul>
 	</div>
-</div>
+  </div>
 </div>

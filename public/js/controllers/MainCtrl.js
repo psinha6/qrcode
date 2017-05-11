@@ -4,37 +4,10 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
     $("#container").css("display", "none");
 	$scope.qrCode;
 	$scope.isQRGenerated = false;
-	$scope.classNames = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'];
+	$scope.classNames = ['1', '2', '3', '4', '5', '6', '7', '8'];
 
 	//$scope.tagline = 'To the moon and back!';
 	$scope.generateQRCode = function(){
-		var error;
-		/*if(!$scope.syllabusNo){
-			error = "Please enter syllabus id";
-		} else if(!$scope.contentId){
-			if(error){
-				error += "and content id";
-			} else {
-				error = "Please enter content id";
-			}
-		} else if(!$scope.className){
-			if(error){
-				error += "and class number";
-			} else {
-				error = "Please enter class number";
-			}
-		}
-		if(error){
-			alert(error);
-			return;	
-		}
-		var url = "www.nextcurriculum.in/app/qrcode/";
-		console.log("URL::" + url);
-		$('#text').val(url);
-		
-		update();
-		$scope.isQRGenerated = true;
-		*/
         // +++++++++++++++++++++++++++++++++ Validations begin +++++++++++++++++++++++++++++++++//
         var error = "Please enter"
         if(!$scope.className){

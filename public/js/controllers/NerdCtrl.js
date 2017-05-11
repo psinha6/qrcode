@@ -1,4 +1,4 @@
-angular.module('NerdCtrl', []).controller('NerdController', function($scope, $http) {
+angular.module('NerdCtrl', []).controller('NerdController', function($scope, $http, NerdService) {
 
 	$("#qrgenerator").css("display", "none");
 
@@ -14,6 +14,11 @@ angular.module('NerdCtrl', []).controller('NerdController', function($scope, $ht
           });
 	}
 
+  $scope.addMappingToImage = function(desc){
+    console.log(desc);
+    Nerd.imageid = desc;
+    Nerd.printImageId();
+  }
 	$scope.tagline = '';
 
 });

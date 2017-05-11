@@ -8,5 +8,11 @@
     "method-override": "~2.0.2",
     "mongoose": "~3.8.0",
     "mysql" : "^2.5.4"
+  }, 
+  "scripts": {
+    "postinstall": "bower install",
+
+    "prestart": "npm install",
+    "start": "node server.js"
   }
 }
