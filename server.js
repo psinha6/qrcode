@@ -5,8 +5,9 @@ var mongoose       = require('mongoose');
 var bodyParser     = require('body-parser');
 var methodOverride = require('method-override');
 var fs 			   = require('file-system');
+var archiver 	   = require('archiver');
 
-var mysql      = require('mysql');
+var mysql          = require('mysql');
 // configuration ===========================================
 	
 var connection = mysql.createConnection({
@@ -145,6 +146,76 @@ app.get('/getImageDetails', function(req, resp){
 	    	}
 	    	resp.send(JSON.stringify(rows));
 	    	console.log(rows);
+	   	}
+	    else{
+	     	console.log('Error while performing Query.' + err);
+	     	resp.status(400).send({data: err});
+	    }
+	   
+	});
+});
+
+var getStream = function(fileName){
+	return fs.readFileSync(fileName);
+}
+
+app.get('/downloadImages', function(req, resp){
+	var dataObject = req.query;
+	console.log("Image title ::" + dataObject.filterData);
+	if(dataObject.filterData == 'undefined' || dataObject.filterData == undefined){
+		dataObject.filterData = '';
+	}
+	var sql = "SELECT * from qrImageTable where image_title LIKE '%" + dataObject.filterData + "%'";
+	console.log("Query::" + sql);
+	var fileNames = [];
+	connection.query(sql, function(err, rows, fields) {
+	   	if (!err){
+	    	console.log('The solution is: ', rows);
+	    	for(var i=0; i < rows.length; i++){
+	    		
+	    		if(rows[i].image){
+	    			rows[i].path = rows[i].image_title + '.png';
+	    			rows[i].image = "";
+	    			fileNames.push(rows[i].path);
+	    		} else {
+	    			rows[i].path = "null";
+	    		}
+	    	}
+	    	var archive  	   = archiver('zip');
+	    	var output = fs.createWriteStream(__dirname + '/public/Download.zip');
+	    	archive.pipe(output);
+	    	for(i=0; i<fileNames.length; i++){
+				var path = __dirname + '/public/img/'+fileNames[i];
+				console.log("path::" + path);
+				archive.append(getStream(path), { name: fileNames[i]});
+			}
+			/*archive.finalize(function(err, bytes) {
+			  if (err) {
+			    resp.status(400).send({data: err});
+			  }else{
+			  	resp.setHeader('Content-Type', 'application/json');
+				resp.send(JSON.stringify({totalBytes: archive.pointer(), name: 'Download.zip'}));
+				console.log(archive.pointer() + ' total bytes');
+			  }
+			});*/
+			// listen for all archive data to be written
+			/*output.on('close', function() {
+				resp.writeHead(200, {
+		          "Content-Type": "application/octet-stream",
+		          "Content-Disposition" : "attachment; filename='Download.zip'"});
+				console.log("Location :: " + __dirname+ '/public/Download.zip');
+		        fs.createReadStream(__dirname+ '/public/Download.zip').pipe(resp);
+				console.log(archive.pointer() + 'close total bytes');
+				
+				console.log(archive.pointer() + ' resp.download close total bytes');
+				resp.download(__dirname + '/public/Download.zip');
+			});*/
+			output.on('close', function() {
+				resp.setHeader('Content-Type', 'application/json');
+				resp.send(JSON.stringify({totalBytes: archive.pointer(), name: 'Download.zip'}));
+				console.log(archive.pointer() + ' total bytes');
+			});
+			archive.finalize();
 	   	}
 	    else{
 	     	console.log('Error while performing Query.' + err);

@@ -20,6 +20,18 @@ angular.module('NerdCtrl', []).controller('NerdController', function($scope, $ht
     Nerd.printImageId();
     $location.path( 'geeks' );
   }
-	$scope.tagline = '';
+	$scope.zipDownload = function(filterData){
+    $http({
+          method: 'GET',
+          url: '/downloadImages',
+          params: {filterData: filterData}
+        }).then(function successCallback(response) {
+          console.log("Image saved successfully :: " + JSON.stringify(response));
+          $scope.filesZipped = response.data.name;
+          
+        }, function errorCallback(response) {
+          console.log("Error could not save image::" + JSON.stringify(response));
+        });
+  }
 
 });

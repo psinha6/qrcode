@@ -86,9 +86,9 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
           data: {image: src, image_id: $scope.imageid, image_title : $scope.title}
         }).then(function successCallback(response) {
             console.log("Image saved successfully :: " + JSON.stringify(response));
-            $scope.generalText = "Image saved successfully";
             $scope.title = "";
             $scope.createNew();
+            $scope.generalText = "Image saved successfully";
           }, function errorCallback(response) {
             console.log("Error could not save image::" + JSON.stringify(response));
             $scope.generalText = "Image not saved";
