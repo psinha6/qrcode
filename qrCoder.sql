@@ -24,10 +24,22 @@ truncate table qrImageTable;
 
 CREATE TABLE qrAssetsMapping(
 	asset_id INT NOT NULL AUTO_INCREMENT,
+    board varchar(50) NOT NULL,
     asset_type varchar(50) NOT NULL,
+    image_id INT NOT NULL,
     FOREIGN KEY (image_id) REFERENCES qrImageTable(image_id),
     syllabus_id INT NOT NULL,
+    class_name varchar(50) NOT NULL,
+    subject_name varchar(50) NOT NULL,
+    chapter_no varchar(100) NOT NULL,
+    chapter_name varchar(100),
+    concept_name varchar(100) NOT NULL,
     content_id INT NOT NULL,
     asset_description varchar(50),
     PRIMARY KEY ( asset_id )
 );
+
+Select * from qrAssetsMapping where image_id='1';
+
+truncate table qrAssetsMapping;
+
