@@ -272,7 +272,27 @@ app.post('/editMappingToDataBase',function(req, resp){
 	var sql = "UPDATE qrAssetsMapping SET asset_type='" + dataObject.asset_type + "', syllabus_id='" + 
 	dataObject.syllabus_id + "', class_name='" + dataObject.class_name + "', chapter_no = '" + dataObject.chapter_no + "', chapter_name ='" + 
 	dataObject.class_name + "', concept_name='" + dataObject.concept_name + "', content_id='" + dataObject.content_id + 
-	"', asset_description = '" + dataObject.asset_description + "', board = '" + dataObject.board + "' where asset_id='" + dataObject.asset_id + "'";
+	"', asset_description = '" + dataObject.asset_description + "', board = '" + dataObject.board + "', subject_name = '"+ dataObject.subject_name + "' where asset_id='" + dataObject.asset_id + "'";
+	
+	console.log("editMappingToDataBase :: SQL::" + sql);
+
+	connection.query(sql, function (err, result) {
+	    if (err){
+	    	console.log("Error " + err);
+	    	resp.status(400).send({data: err});
+	    	return;
+	    } else{
+	    	console.log("1 record updated" + JSON.stringify(result));	
+	    	resp.send(JSON.stringify(result));
+	    }
+	});
+	
+});
+
+app.post('/deleteMappingToDataBase',function(req, resp){
+	var dataObject = req.body;
+	
+	var sql = "DELETE from qrAssetsMapping where asset_id='" + dataObject.asset_id + "'";
 	
 	console.log("editMappingToDataBase :: SQL::" + sql);
 

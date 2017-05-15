@@ -60,22 +60,35 @@ angular.module('GeekCtrl', []).controller('GeekController', function($scope, $ht
               	concept_name: $scope.concept_name, 
               	content_id: $scope.content_id, 
 				image_id: $scope.image_id, 
+				subject_name: $scope.subjectName,
               	asset_description: $scope.asset_description,
               	board : $scope.Board
               }
             }).then(function successCallback(response) {
 	        	console.log("Data saved successfully :: " + JSON.stringify(response.data));
 	        	clearData();
+	        	$scope.getQRDetails();
 	        }, function errorCallback(response) {
 	           console.log("Error could not save mapping data::" + JSON.stringify(response));
 	        });
 	}
 
 	function clearData(){
-
+		$scope.asset_type = "";
+      	$scope.class_name = "";
+      	$scope.syllabus_id = "";
+      	$scope.chapter_no = "";
+      	$scope.chapter_name = "";
+      	$scope.concept_name = "";
+      	$scope.content_id = "";
+		$scope.image_id = "";
+		$scope.subjectName = "";
+      	$scope.asset_description = "";
+      	$scope.Board = "";
 	}
 
 	$scope.submitEdit = function(mapped){
+		console.log("submitEdit::" + JSON.stringify(mapped));
 		$http({
               method: 'POST',
               url: '/editMappingToDataBase',
@@ -89,14 +102,33 @@ angular.module('GeekCtrl', []).controller('GeekController', function($scope, $ht
               	content_id: mapped.content_id, 
 				image_id: mapped.image_id, 
               	asset_description: mapped.asset_description,
-              	board : mapped.Board
+              	subject_name: mapped.subject_name,
+              	board : mapped.board
               }
             }).then(function successCallback(response) {
 	        	console.log("Data saved successfully :: " + JSON.stringify(response.data));
-	        	clearData();
+	        	$scope.message = "successfully edited";
+	        	$scope.getQRDetails();
 	        }, function errorCallback(response) {
 	           console.log("Error could not save mapping data::" + JSON.stringify(response));
+	           $scope.message = "Error in saving data";
 	        });
+	}
+
+	$scope.deleteAsset = function(mapped){
+		console.log("deleteAsset::" + JSON.stringify(mapped));
+		$http({
+              method: 'POST',
+              url: '/deleteMappingToDataBase',
+              data: { asset_id: mapped.asset_id}
+            }).then(function successCallback(response) {
+	        	console.log("Data saved successfully :: " + JSON.stringify(response.data));
+	        	$scope.message = "successfully deleted";
+	        	$scope.getQRDetails();
+	        }, function errorCallback(response) {
+	           console.log("Error could not save mapping data::" + JSON.stringify(response));
+	           $scope.message = "Error in deleting data";
+	        });	
 	}
 
 });

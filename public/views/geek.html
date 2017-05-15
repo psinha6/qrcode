@@ -13,7 +13,7 @@
 	          <p >Board<input type="text" ng-model="mapping.board" ng-readonly='editAsset'></p>
 			  <p >Asset Type<input type="text" ng-model="mapping.asset_type" ng-readonly='editAsset'></p>
 			  <p >Class<input type="text" ng-model="mapping.class_name" ng-readonly='editAsset'></p>
-			  <p >Subject<input type="text" ng-model="mapping.subjectName" ng-readonly='editAsset'></p>
+			  <p >Subject<input type="text" ng-model="mapping.subject_name" ng-readonly='editAsset'></p>
 			  <p >ChapterNo<input type="text" ng-model="mapping.chapter_no" ng-readonly='editAsset'></p>
 			  <p >ChapterName<input type="text" ng-model="mapping.chapter_name" ng-readonly='editAsset'></p>
 			  <p >ConceptName <input type="text" ng-model="mapping.concept_name" ng-readonly='editAsset'></p>
@@ -22,7 +22,8 @@
           	</div>
           	<div>
           	  <button class ="btn-warning btn-sm" ng-click='editAsset = false'>Edit</button>
-          	  <button class ="btn-warning btn-sm" ng-show="!editAsset" ng-click=submitEdit(mapping);>Submit</button>
+          	  <button class ="btn-warning btn-sm" ng-show="editAsset" ng-click="deleteAsset(mapping)">Delete</button>
+          	  <button class ="btn-warning btn-sm" ng-show="!editAsset" ng-click=submitEdit(mapping);>Update</button>
           	</div>
         </li>
     </ul>
