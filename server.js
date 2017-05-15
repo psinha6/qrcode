@@ -225,6 +225,69 @@ app.get('/downloadImages', function(req, resp){
 	});
 });
 
+app.post('/addMappingToDataBase',function(req, resp){
+	var dataObject = req.body;
+	
+	var sql = "INSERT INTO qrAssetsMapping (asset_type, image_id, syllabus_id, class_name, chapter_no, chapter_name, concept_name, content_id, asset_description, board, subject_name) values ('"
+	 + dataObject.asset_type + "','" + dataObject.image_id + "','" + dataObject.syllabus_id + "','" + dataObject.class_name + "','" + dataObject.chapter_no + 
+	 "','" + dataObject.chapter_name + "','" + dataObject.concept_name + "','" + dataObject.content_id + "','" + dataObject.asset_description + "','" + dataObject.board + "','" + dataObject.subject_name + "')";
+	console.log("addMappingToDataBase :: SQL::" + sql);
+
+	connection.query(sql, function (err, result) {
+	    if (err){
+	    	console.log("Error " + err);
+	    	resp.status(400).send({data: err});
+	    	return;
+	    } else{
+	    	console.log("1 record inserted" + JSON.stringify(result));	
+	    	resp.send(JSON.stringify(result));
+	    }
+	});
+	
+});
+
+
+
+app.get('/getMappedData', function(req, resp){
+	
+	var dataObject = req.query;
+	console.log("Image title ::" + dataObject.image_id);
+	var sql = "SELECT * from qrAssetsMapping where image_id='" + dataObject.image_id + "'";
+	connection.query(sql, function(err, rows, fields) {
+	   	if (!err){
+	    	resp.send(JSON.stringify(rows));
+	    	console.log("getMappedData" + JSON.stringify(rows));
+	   	}
+	    else{
+	     	console.log('getMappedData Error while performing Query.' + err);
+	     	resp.status(400).send({data: err});
+	    }
+	   
+	});
+});
+
+app.post('/editMappingToDataBase',function(req, resp){
+	var dataObject = req.body;
+	
+	var sql = "UPDATE qrAssetsMapping SET asset_type='" + dataObject.asset_type + "', syllabus_id='" + 
+	dataObject.syllabus_id + "', class_name='" + dataObject.class_name + "', chapter_no = '" + dataObject.chapter_no + "', chapter_name ='" + 
+	dataObject.class_name + "', concept_name='" + dataObject.concept_name + "', content_id='" + dataObject.content_id + 
+	"', asset_description = '" + dataObject.asset_description + "', board = '" + dataObject.board + "' where asset_id='" + dataObject.asset_id + "'";
+	
+	console.log("editMappingToDataBase :: SQL::" + sql);
+
+	connection.query(sql, function (err, result) {
+	    if (err){
+	    	console.log("Error " + err);
+	    	resp.status(400).send({data: err});
+	    	return;
+	    } else{
+	    	console.log("1 record updated" + JSON.stringify(result));	
+	    	resp.send(JSON.stringify(result));
+	    }
+	});
+	
+});
 // routes ==================================================
 require('./app/routes')(app); // pass our application into our routes
 

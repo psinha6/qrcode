@@ -1,9 +1,61 @@
 <div class="phone-images" ng-init="getQRDetails()">
-  <img ng-src="{{img}}" class="phone"
-      ng-class="{selected: img === $ctrl.mainImageUrl}"
-      ng-repeat="img in $ctrl.phone.images" />
+  <img src="{{img}}" class="phone" />
 </div>
 
-<h1>{{$ctrl.phone.name}}</h1>
+<h1>{{image_title}}</h1>
 
-<p>{{$ctrl.phone.description}}</p>
+<p>{{image_description}}</p>
+
+<div class="col-md-10 text-left">
+	<ul class="phones">
+        <li ng-repeat="mapping in mappedData" class="thumbnail phone-list-item">
+          	<div>
+	          <p >Board<input type="text" ng-model="mapping.board" ng-readonly='editAsset'></p>
+			  <p >Asset Type<input type="text" ng-model="mapping.asset_type" ng-readonly='editAsset'></p>
+			  <p >Class<input type="text" ng-model="mapping.class_name" ng-readonly='editAsset'></p>
+			  <p >Subject<input type="text" ng-model="mapping.subjectName" ng-readonly='editAsset'></p>
+			  <p >ChapterNo<input type="text" ng-model="mapping.chapter_no" ng-readonly='editAsset'></p>
+			  <p >ChapterName<input type="text" ng-model="mapping.chapter_name" ng-readonly='editAsset'></p>
+			  <p >ConceptName <input type="text" ng-model="mapping.concept_name" ng-readonly='editAsset'></p>
+			  <p >Contentid<input type="text" ng-model="mapping.content_id" ng-readonly='editAsset'></p>
+			  <p >Asset Description<input type="text" ng-model="mapping.asset_description" ng-readonly='editAsset'></p>
+          	</div>
+          	<div>
+          	  <button class ="btn-warning btn-sm" ng-click='editAsset = false'>Edit</button>
+          	  <button class ="btn-warning btn-sm" ng-show="!editAsset" ng-click=submitEdit(mapping);>Submit</button>
+          	</div>
+        </li>
+    </ul>
+</div>
+
+
+
+
+<p style="float:left">
+Board<input type="text" ng-model="Board" readonly>
+</p>
+<p style="float:left">
+Asset Type<select class="selectpicker" ng-model="asset_type" ng-options="x for x in assets"></select>
+</p>
+<p style="float:left">
+Class<select class="selectpicker" ng-model="class_name" ng-options="x for x in classNames"></select>
+</p>
+<p style="float:left">
+Subject<select class="selectpicker" ng-model="subjectName" ng-options="x for x in subjects"></select>
+</p>
+<p style="float:left">
+ChapterNo<input type="text" ng-model="chapter_no" required>
+</p>
+<p style="float:left">
+ChapterName<input type="text" ng-model="chapter_name" required>
+</p>
+<p style="float:left">
+ConceptName <input type="text" ng-model="concept_name" required>
+</p>
+<p style="float:left">
+Contentid<input type="text" ng-model="content_id" required>
+</p>
+<p style="float:left">
+Asset Description<input type="text" ng-model="asset_description" required>
+</p>
+<p> <button class ="btn-primary btn-sm" ng-click="addMapping()">Add</button> </p>
