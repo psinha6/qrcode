@@ -1,6 +1,6 @@
-angular.module('MainCtrl', []).controller('MainController', function($scope, $http) {
+angular.module('MainCtrl', []).controller('MainController', function($scope, $http, Nerd, $location) {
 
-	$("#qrgenerator").css("display", "block");
+	$("#qrgenerator").css("display", "none");
     $("#container").css("display", "none");
 	$scope.qrCode;
 	$scope.isQRGenerated = false;
@@ -19,6 +19,15 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
         if(!$scope.pageNo){
             error += " page number";
         }
+        if(!$scope.chapterNo){
+            error += " chapter number";
+        }
+        if(!$scope.chapterName){
+            error += " chapter name";
+        }
+        if(!$scope.conceptName){
+            error += " concept name";
+        }
         if(!$scope.description){
             error += " description";
         }
@@ -30,11 +39,19 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
         // +++++++++++++++++++++++++++++++++ Validations ends +++++++++++++++++++++++++++++++++//
         if(!$scope.isQRGenerated == true){
             $scope.imageid;
-		    $scope.title = 'Grade' + $scope.className + 'Subject' + $scope.syllabusNo + 'PgNo' + $scope.pageNo;
+		    $scope.title = 'Grade' + $scope.className + '-' + $scope.syllabusNo + '-PgNo' + $scope.pageNo;
 		    $http({
               method: 'POST',
               url: '/addToDatabase',
-              data: {image_title: $scope.title, image_description: $scope.description, image_pgno : $scope.pageNo}
+              data: {image_title: $scope.title, 
+                    image_description: $scope.description, 
+                    image_pgno : $scope.pageNo,
+                    class_name: $scope.className,
+                    subject_name: $scope.syllabusNo,
+                    chapter_no: $scope.chapterNo,
+                    chapter_name: $scope.chapterName,
+                    concept_name: $scope.conceptName
+                }
             }).then(function successCallback(response) {
 	        console.log("Image saved successfully :: " + JSON.stringify(response.data));
             $scope.imageid = response.data[0].image_id;
@@ -60,10 +77,10 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
 	}
 
     $scope.createNew = function(){
-        if($scope.title){
+        /*if($scope.title){
             alert("Please save image");
             return;
-        }
+        }*/
         $scope.isQRGenerated = false;
         $("#container").css("display", "none");
         $scope.className = "";
@@ -86,7 +103,7 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
           data: {image: src, image_id: $scope.imageid, image_title : $scope.title}
         }).then(function successCallback(response) {
             console.log("Image saved successfully :: " + JSON.stringify(response));
-            $scope.title = "";
+            /*$scope.title = "";*/
             $scope.createNew();
             $scope.generalText = "Image saved successfully";
           }, function errorCallback(response) {
@@ -95,6 +112,25 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
           });
 	}
 
+    $scope.addMappingToImage = function(){
+        console.log($scope.title);
+        Nerd.imageid = $scope.title;
+        Nerd.printImageId();
+        $location.path( 'geeks' );
+    }
+
+    $scope.getNumber = function(){
+        var result = [];
+        var limit = 100;
+        for(var i =1; i <=limit; i++){
+            result.push(i);
+        }
+        return result;
+    }
+
+    $scope.getBoard = function(){
+        return ["Next Curriculum", "CBSE", "ICSE"];
+    }
 	var win = window; // eslint-disable-line no-undef
     var FR = win.FileReader;
     var doc = win.document;
@@ -192,6 +228,7 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
     		var $this = $(this);
     		$this.wrap('<a href="' + $this.attr('src') + '" download />')
 	    });
+        $scope.download();
     }
 
     function update() {

@@ -1,6 +1,8 @@
 angular.module('NerdCtrl', []).controller('NerdController', function($scope, $http, Nerd, $location) {
 
 	$("#qrgenerator").css("display", "none");
+  $scope.classNames = Nerd.classNames;
+  $scope.subjects = Nerd.subjects;
 
 	$scope.showStuff = function(){
 		$http({
@@ -20,7 +22,9 @@ angular.module('NerdCtrl', []).controller('NerdController', function($scope, $ht
     Nerd.printImageId();
     $location.path( 'geeks' );
   }
-	$scope.zipDownload = function(filterData){
+	$scope.zipDownload = function(filterData, filterData1){
+    filterData += filterData1;
+    console.log("zipDownload filterData:: " + filterData)
     $http({
           method: 'GET',
           url: '/downloadImages',
@@ -34,4 +38,7 @@ angular.module('NerdCtrl', []).controller('NerdController', function($scope, $ht
         });
   }
 
+  $scope.generateNewQR = function(){
+    $location.path( '/' );
+  }
 });

@@ -6,7 +6,11 @@ CREATE TABLE qrImageTable(
    image_title VARCHAR(100) NOT NULL unique,
    image_description varchar(100) NOT NULL,
    image_pgno varchar(30),
-   image BLOB,
+   class_name varchar(50), 
+   subject_name varchar(50),
+   chapter_no varchar(50),
+   chapter_name varchar(50),
+   concept_name varchar(50),
    PRIMARY KEY ( image_id )
    );
    
@@ -15,7 +19,8 @@ CREATE TABLE qrImageTable(
    
    
    
-   select * from qrImageTable;
+   
+
    
    INSERT INTO qrImageTable (image_title, image_description, image_pgno) values ('Grade3syllabusNoEnglishpageno12,connection.conne
 ct();,12')
@@ -43,3 +48,4 @@ Select * from qrAssetsMapping where image_id='1';
 
 truncate table qrAssetsMapping;
 
+drop table if exists qrAssetsMapping;

@@ -53,4 +53,6 @@ angular.module('NerdService', []).service('Nerd', ['$http', function($http) {
                     {"Syllabus": "1010869", "Subject": "Hindi", "Class": "UKG"},
                     {"Syllabus": "1010868", "Subject": "Hindi", "Class": "LKG"}
                 ];
+    this.classNames = ['Grade1', 'Grade2', 'Grade3', 'Grade4', 'Grade5', 'Grade6', 'Grade7', 'Grade8'];
+    this.subjects = ["Hindi", "EVS", "Social_Studies", "Science", "Maths", "English"];
 }]);

@@ -5,7 +5,7 @@
 
 body {
     font-family: 'Ubuntu', 'Arial', 'sans';
-    text-align: center;
+    /*text-align: center;*/
     background: repeat url('back.png');
 }
 
@@ -61,8 +61,8 @@ hr {
 }
 
 label {
-    font-size: 10px;
-    color: #aaa;
+    /*font-size: 10px;
+    color: #aaa;*/
     padding: 12px 4px 0 4px;
 }
 
@@ -117,6 +117,11 @@ input::-webkit-slider-thumb {
 }
 .m-b-15{
   margin-bottom: 15px;
+}
+
+.fx{
+  display: flex;
+  align-items: center;
 }
 
 .phone-list-item{
@@ -260,4 +265,71 @@ input::-webkit-slider-thumb {
   height: 150px;
   margin-right: 20px;
   float: right;
+}
+
+.w100{
+  width: 100%;
+}
+
+.outline-none{
+  outline: none !important; 
+}
+
+.mt1{
+  margin-top: 1rem !important;
+}
+.mt2{
+  margin-top: 2rem !important;
+}
+.mt3{
+  margin-top: 3rem !important;
+}
+.mt4{
+  margin-top: 4rem !important;
+}
+
+.mb1{
+  margin-bottom: 1rem !important;
+}
+.mb2{
+  margin-bottom: 2rem !important;
+}
+.mb3{
+  margin-bottom: 3rem !important;
+}
+.mb4{
+  margin-bottom: 4rem !important;
+}
+.mappingImg{
+  width: 30px;
+  height: 30px;
+}
+
+.zipLink{
+  text-align: center;
+  cursor: pointer;
+  margin: 0 10px;
+}
+.zipLink img{
+  width: 50px;
+  height: 50px;
+}
+
+
+.clearBoth{
+  clear: both;
+}
+
+.navbar{
+  border-radius: 0;
+}
+
+.center-block{
+  float: none;
+  margin: 0 auto;  
+  clear: both;
+}
+
+.textAreaResizeY{
+  resize: vertical;
 }

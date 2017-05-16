@@ -20,20 +20,81 @@
 </div>
  -->
 
- 	<div class="form-horizontal">
-		<label class="col-sm-6 control-label text-right">Select Grade </label> <select class="selectpicker" ng-model="className" ng-options="x for x in classNames"></select>
-			<p></p>
-		<label class="col-sm-6 control-label text-right">Enter Subject Name </label> <!-- <input type="text" ng-model="syllabusNo" required> -->
-			<select class="selectpicker" ng-model="syllabusNo" ng-options="x for x in subjects"></select>
-			<p></p>
-		<label class="col-sm-6 control-label text-right">Enter Page No </label> <input type="text" ng-model="pageNo" required>
-		<label class="col-sm-6 control-label text-right">Enter Description </label> <input type="text" ng-model="description" required>
-	</div>
- 	<label class="label label-info control-label">Click on image to download</label>
- 	<p>
-	<p> <button class ="btn-warning btn-lg" ng-click="generateQRCode()">Generate</button> </p>
-	<label class="label label-info control-label" ng-show="isQRGenerated">QR code generated but not saved. Click on 'save' to save the code</label>
-	<p> <button class ="btn-warning btn-lg" ng-click="download()" ng-show="isQRGenerated">Save</button> </p>
-	<p> <button class ="btn-warning btn-lg" ng-click="createNew()">New</button> </p>
+ 	<div class="form-horizontal col-xs-11 col-sm-8 col-lg-6 center-block">
+ 		<div class="col-xs-5">
+	 		<div class="form-group">
+				<!-- <label class="control-label text-left">Board</label>
+				<select class="selectpicker form-control" ng-model="board" ng-options="x for x in getBoard()"></select> -->
+				<label class="control-label text-right">Class</label> <!-- <input type="text" ng-model="syllabusNo" required> -->
+				<select class="selectpicker form-control" ng-model="className" ng-options="x for x in classNames"></select>
+			</div>
+		</div>
+		<div class="col-xs-offset-1 col-xs-5">
+			<div class="form-group">	
+				<label class="control-label text-left">Subject</label>
+				<select class="selectpicker form-control" ng-model="syllabusNo" ng-options="x for x in subjects"></select>
+			</div>
+		</div>
+ 		<div class="col-xs-5">
+	 		<div class="form-group">
+				<label class="control-label text-right">Ch No</label> <!-- <input type="text" ng-model="syllabusNo" required> -->
+				<select class="selectpicker form-control" ng-model="chapterNo" ng-options="x for x in getNumber()"></select>
+			</div>
+		</div>
+		<div class="col-xs-offset-1 col-xs-6">
+			<div class="form-group">	
+				<label class="control-label text-left">Chapter Name</label>
+				<input  class="form-control" ng-model="chapterName" type="text">
+			</div>
+		</div>
+		<div class="col-xs-5">
+	 		<div class="form-group">
+				<label class="control-label text-right">Concept Name</label> <!-- <input type="text" ng-model="syllabusNo" required> -->
+				<input class="form-control" ng-model="conceptName" type="text">
+			</div>
+		</div>
+		<div class="col-xs-offset-1 col-xs-6">
+			<div class="form-group">	
+				<label class="control-label text-right">Page No.</label> <!-- <input type="text" ng-model="syllabusNo" required> -->
+				<input class="form-control" ng-model="pageNo" type="text">
+			</div>
+		</div>
 
-	<label class="col-sm-6 label label-danger text-right">{{generalText}}</label>
+		<!-- <div class="col-xs-5">
+	 		<div class="form-group">
+				<label class="control-label text-left">Content Type</label>
+				<input class="form-control" ng-model="contentType" type="text">
+			</div>
+		</div> -->
+
+		<div class="col-xs-12">
+			<!-- <label class="col-sm-6 control-label text-right">Enter Page No </label>
+			<input type="text" ng-model="pageNo" required> -->
+			<div class="form-group">	
+				<!-- <label class="control-label text-right">Enter Description </label> -->
+				<textarea class="form-control mb2 textAreaResizeY" rows="4" ng-model="description" placeholder="Enter Description" required></textarea>
+				<button class ="btn btn-success btn-lg w100 outline-none" ng-click="generateQRCode()">Generate</button>
+			</div>
+		</div>
+
+		<div class="col-xs-12 col-sm-8 center-block text-center">
+				<!-- <label class="label label-info control-label mb1 text-center">Click on image to download</label> -->
+			 	
+			 	<div class="form-group">	
+					<label class="col-xs-2 control-label text-right">Name </label> <!-- <input type="text" ng-model="syllabusNo" required> -->
+					<div class="col-xs-8">
+						<input class="form-control" type="text" readonly value="{{title}}">
+					</div>
+				</div>
+
+				<a class="btn btn-md btn-primary outline-none" href="../img/{{title}}.png" download="{{title}}.png" target="_blank">Download</a>
+				<button class="btn btn-md btn-primary outline-none" ng-click="addMappingToImage()">Link Assets</button>
+
+				<!-- <label class="label label-info control-label" ng-show="isQRGenerated">QR code generated but not saved. Click on 'save' to save the code</label>
+				<button class ="btn-warning btn-lg" ng-click="download()" ng-show="isQRGenerated">Save</button> -->
+			
+			<!-- <p> <button class ="btn-warning btn-lg" ng-click="createNew()">New</button> </p> -->
+
+			<label class="col-sm-6 label label-danger text-right">{{generalText}}</label>
+		</div>
+	</div>		

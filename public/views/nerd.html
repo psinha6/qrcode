@@ -1,22 +1,49 @@
 <div class="container-fluid" ng-init="showStuff()">
   <div class="row">
-    <div class="col-md-2">
+    <!-- <div class="col-md-2">
 
-	    <p>
-		    Search:
-		    <input ng-model="filterData" />
-	  	</p>
-	  	<p>
-	  		Create zip for current result
-	  		<div style="width: 50px;height: 50px; text-align: center; cursor: pointer; cursor: hand;" ng-click="zipDownload(filterData)">
-	  			<img src="../img/zipIt.png" style="width: 100%; height: 100%" >
+	    <div class="form-horizontal mb2">
+		    <label class="control-label">Search:</label>
+		    <input class="form-control" ng-model="filterData" />
+	  	</div>
+	  	<div>
+	  		<label class="control-label">Create zip for current result</label>
+	  		<div class="zipLink" ng-click="zipDownload(filterData)">
+	  			<img src="../img/zipIt.png" class="mt1 mb1">
 	  		</div>
-	  		 <a href="{{filesZipped}}" ng-show="filesZipped" target="_blank">Download</a>
-	  	</p>
-  	</div>
+	  		<a href="{{filesZipped}}" class="btn btn-primary" ng-show="filesZipped" target="_blank">Download</a>
+	  	</div>
+  	</div> -->
 
-  	<div class="col-md-10 text-left">
-  		<ul class="phones">
+  	<div class="col-md-10 text-left center-block">
+
+  		<div class="form-horizontal mb3 clearfix">
+	 		<div class="col-xs-5 col-sm-4 col-lg-3">
+		 		<div class="form-group">
+					<label class="control-label text-left">Select Grade</label>
+					<select class="selectpicker form-control" ng-model="className" ng-options="x for x in classNames"></select>
+				</div>
+			</div>
+			<div class="col-xs-offset-1 col-xs-6 col-sm-4 col-lg-3">
+				<div class="form-group">	
+					<label class="control-label text-right">Enter Subject Name </label> <!-- <input type="text" ng-model="syllabusNo" required> -->
+					<select class="selectpicker form-control" ng-model="syllabusNo" ng-options="x for x in subjects"></select>
+				</div>
+			</div>
+			<div class="col-xs-offset-1 col-sm-offset-0 col-lg-offset-1 col-xs-6 col-sm-4 col-lg-4">
+				<div class="form-group fx">
+					<label class="control-label pull-left">Create zip for current result</label>
+			  		<div class="zipLink" ng-click="zipDownload(className, syllabusNo)">
+			  			<img src="../img/zipIt.png" class="mt1 mb1">
+			  		</div>
+			  		<a href="{{filesZipped}}" class="btn btn-primary" ng-show="filesZipped" target="_blank">Download</a>
+			  	</div>	
+	  		</div>
+
+			<button class="btn btn-success pull-left clearBoth" ng-click="generateNewQR()">Create New</button>
+		</div>
+
+  		<!--<ul class="phones w100 clearfix">
 	        <li ng-repeat="qrcode in qrcodes | filter:filterData" class="thumbnail phone-list-item">
 	          
 	          <div>
@@ -24,14 +51,54 @@
 		          <p class="m-b-10"> Description {{qrcode.image_description}}</p>
 		          <p class="m-b-10">Page No: {{qrcode.image_pgno}}</p>
 		          <a href="{{qrcode.path}}" download="{{qrcode.image_title}}" target="_blank">Download
-	            		<!-- <img src="{{qrcode.path}}" alt="{{qrcode.name}}" class="imageSmall"/> -->
+	            		 <img src="{{qrcode.path}}" alt="{{qrcode.name}}" class="imageSmall"/> 
 	          	  </a>
 	          </div>
 	          <div style="width: 30px;height: 30px; float: right;" ng-click="addMappingToImage(qrcode.image_title)">
 	          	<img src="../img/add.png" alt="add mapping" style="width: 100%; height: 100%" />
 	          </div>
 	        </li>
-	    </ul>
+	    </ul>-->
+
+	    <table class="table table-striped">
+		    <thead>
+		    	<tr>
+		    		<th>ID</th>
+		    		<th>Title</th>
+		    		<th>Description</th>
+		    		<th>Page No</th>
+		    		<th>Class</th>
+		    		<th>Subject</th>
+		    		<th>Chapter Number</th>
+		    		<th>Chapter Name</th>
+		    		<th>Concept</th>
+		    		<th>Download</th>
+		    		<th>Mapping</th>
+		    	</tr>
+		    </thead>
+		    <tbody>
+		    	<tr ng-repeat="qrcode in qrcodes | filter:className | filter: syllabusNo">
+		    		<td>{{qrcode.image_id}}</td>
+		    		<td>{{qrcode.image_title}}</td>
+		    		<td>{{qrcode.image_description}}</td>
+		    		<td>{{qrcode.image_pgno}}</td>
+		    		<td>{{qrcode.class_name}}</td>
+		    		<td>{{qrcode.subject_name}}</td>
+		    		<td>{{qrcode.chapter_no}}</td>
+		    		<td>{{qrcode.chapter_name}}</td>
+		    		<td>{{qrcode.concept_name}}</td>
+		    		<td>
+		    			<a href="{{qrcode.path}}" download="{{qrcode.image_title}}" target="_blank">Download</a>
+		    		</td>
+		    		<td>
+		    			<div class="center-block mappingImg" ng-click="addMappingToImage(qrcode.image_title)">
+	          				<img src="../img/add.png" alt="add mapping" style="width: 100%; height: 100%" />
+	          			</div>		
+		    		</td>
+		    	</tr>
+		    </tbody>
+	    </table>
+
 	</div>
   </div>
 </div>

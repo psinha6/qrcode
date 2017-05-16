@@ -68,12 +68,12 @@ app.post('/saveImage',function(req, resp){
 	});
 });
 
-
-
 app.post('/addToDatabase',function(req, resp){
 	var dataObject = req.body;
 	
-	var sql = "INSERT INTO qrImageTable (image_title, image_description, image_pgno) values ('" + dataObject.image_title + "','" + dataObject.image_description + "','" + dataObject.image_pgno + "')";
+	var sql = "INSERT INTO qrImageTable (image_title, image_description, image_pgno, class_name, subject_name, chapter_no, chapter_name, concept_name) values ('" + 
+	dataObject.image_title + "','" + dataObject.image_description + "','" + dataObject.image_pgno + "','" + dataObject.class_name + 
+	"','" + dataObject.subject_name + "','" + dataObject.chapter_no + "','" + dataObject.chapter_name + "','" + dataObject.concept_name + "')";
 	console.log("SQL::" + sql);
 
 	connection.query(sql, function (err, result) {
@@ -124,7 +124,6 @@ app.get('/showQRCodes', function(req, resp){
 	   
 	});
 });
-
 
 app.get('/getImageDetails', function(req, resp){
 	console.log("query" + JSON.stringify(req.query));
@@ -313,5 +312,5 @@ require('./app/routes')(app); // pass our application into our routes
 
 // start app ===============================================
 app.listen(port);	
-console.log('Connect to port:: ' + port); 			// shoutout to the user
-exports = module.exports = app; 						// expose app
+console.log('Connect to port:: ' + port); 			
+exports = module.exports = app; 					
