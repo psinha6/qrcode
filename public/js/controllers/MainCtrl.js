@@ -109,6 +109,7 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
           }, function errorCallback(response) {
             console.log("Error could not save image::" + JSON.stringify(response));
             $scope.generalText = "Image not saved";
+            $scope.isQRGenerated = false;
           });
 	}
 
@@ -214,7 +215,7 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
 
             image: elById('img-buffer')
         };
-
+        console.log(JSON.stringify(options));
         var container = elById('container');
         var qrcode = kjua(options);
         qrcode.setAttribute("class", "downloadable");
@@ -228,7 +229,7 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
     		var $this = $(this);
     		$this.wrap('<a href="' + $this.attr('src') + '" download />')
 	    });
-        $scope.download();
+        //$scope.download();
     }
 
     function update() {
