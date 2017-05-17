@@ -11,7 +11,7 @@ angular.module('GeekCtrl', []).controller('GeekController', function($scope, $ht
 		console.log("Image id from server" + Nerd.imageid);
 		$http({
               method: 'GET',
-              url: '/getImageDetails',
+              url: Nerd.serverUrl + '/getImageDetails',
               params: {image_title: Nerd.imageid}
             }).then(function successCallback(response) {
 	        	console.log("Data recieved successfully :: " + JSON.stringify(response.data));
@@ -24,7 +24,7 @@ angular.module('GeekCtrl', []).controller('GeekController', function($scope, $ht
 
 	 			$http({
 		              method: 'GET',
-		              url: '/getMappedData',
+		              url: Nerd.serverUrl + '/getMappedData',
 		              params: {image_id: $scope.image_id}
 		            }).then(function successCallback(response) {
 			        	console.log("Data recieved successfully :: " + JSON.stringify(response.data));
@@ -51,7 +51,7 @@ angular.module('GeekCtrl', []).controller('GeekController', function($scope, $ht
 		}
 		$http({
               method: 'POST',
-              url: '/addMappingToDataBase',
+              url: Nerd.serverUrl + '/addMappingToDataBase',
               data: {asset_type: $scope.asset_type, 
               	class_name: $scope.class_name, 
               	syllabus_id: $scope.syllabus_id, 
@@ -91,7 +91,7 @@ angular.module('GeekCtrl', []).controller('GeekController', function($scope, $ht
 		console.log("submitEdit::" + JSON.stringify(mapped));
 		$http({
               method: 'POST',
-              url: '/editMappingToDataBase',
+              url: Nerd.serverUrl + '/editMappingToDataBase',
               data: { asset_id: mapped.asset_id,
               	asset_type: mapped.asset_type, 
               	class_name: mapped.class_name, 
@@ -119,7 +119,7 @@ angular.module('GeekCtrl', []).controller('GeekController', function($scope, $ht
 		console.log("deleteAsset::" + JSON.stringify(mapped));
 		$http({
               method: 'POST',
-              url: '/deleteMappingToDataBase',
+              url: Nerd.serverUrl + '/deleteMappingToDataBase',
               data: { asset_id: mapped.asset_id}
             }).then(function successCallback(response) {
 	        	console.log("Data saved successfully :: " + JSON.stringify(response.data));

@@ -19,7 +19,7 @@ CREATE TABLE qrImageTable(
    
    
    
-   
+   Select * from qrImageTable;
 
    
    INSERT INTO qrImageTable (image_title, image_description, image_pgno) values ('Grade3syllabusNoEnglishpageno12,connection.conne

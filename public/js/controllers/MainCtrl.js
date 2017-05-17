@@ -42,7 +42,7 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
 		    $scope.title = 'Grade' + $scope.className + '-' + $scope.syllabusNo + '-PgNo' + $scope.pageNo;
 		    $http({
               method: 'POST',
-              url: '/addToDatabase',
+              url: Nerd.serverUrl + '/addToDatabase',
               data: {image_title: $scope.title, 
                     image_description: $scope.description, 
                     image_pgno : $scope.pageNo,
@@ -60,7 +60,7 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
             $('#text').val(url);
             //$('#label').val($scope.pageNo);
             update();
-            $scope.isQRGenerated = true;
+            $scope.isQRGenerated = false;
 	        }, function errorCallback(response) {
 	           console.log("Error could not save image::" + JSON.stringify(response));
                if(response.data.data.code == "ER_DUP_ENTRY"){
@@ -70,8 +70,6 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
                }
                
 	        });
-        } else {
-            update();
         }
         $("#container").css("display", "inline-block");
 	}
@@ -85,9 +83,12 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
         $("#container").css("display", "none");
         $scope.className = "";
         $scope.syllabusNo = "";
+        $scope.chapterNo = "";
+        $scope.chapterName = "";
+        $scope.conceptName = "";
         $scope.pageNo = "";
         $scope.description = "";
-        $scope.generalText = "";
+        console.log("Data clean");
     }
 	$scope.download = function(){
         var src;
@@ -99,7 +100,7 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
         console.log("title of image" + $scope.title);
         $http({
           method: 'POST',
-          url: '/saveImage',
+          url: Nerd.serverUrl + '/saveImage',
           data: {image: src, image_id: $scope.imageid, image_title : $scope.title}
         }).then(function successCallback(response) {
             console.log("Image saved successfully :: " + JSON.stringify(response));
@@ -228,6 +229,7 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
     		var $this = $(this);
     		$this.wrap('<a href="' + $this.attr('src') + '" download />')
 	    });
+
         $scope.download();
     }
 
@@ -308,5 +310,5 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
                     {"Syllabus": "1010868", "Subject": "Hindi", "Class": "LKG"}
                 ];
 
-    $scope.subjects = ["Hindi", "EVS", "Social_Studies", "Science", "Maths", "English"];
+    Nerd.subjects = ["Hindi", "EVS", "Social_Studies", "Science", "Maths", "English", "Sanskrit"];
 });

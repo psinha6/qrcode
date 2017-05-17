@@ -6,7 +6,7 @@ var bodyParser     = require('body-parser');
 var methodOverride = require('method-override');
 var fs 			   = require('file-system');
 var archiver 	   = require('archiver');
-
+var uuid 		   = require("uuid/v1")
 var mysql          = require('mysql');
 // configuration ===========================================
 	
@@ -59,13 +59,14 @@ app.post('/saveImage',function(req, resp){
 	fs.writeFile('public/img/' + req.body.image_title + '.png', buf);
 	// Saving the image in database
 	//var sql = "UPDATE qrImageTable SET image = " + data + "where image_id = " req.body.image_id;
-	connection.query('UPDATE qrImageTable SET ? WHERE ?', [{ image: buf }, { image_id: req.body.image_id }], function(err){
+	/*connection.query('UPDATE qrImageTable SET ? WHERE ?', [{ image: buf }, { image_id: req.body.image_id }], function(err){
 		if(err){
 			console.log("Error occured while saving image in db" + err);
 		} else{
 			resp.send("Hello");
 		}
-	});
+	});*/
+	resp.send("Success");
 });
 
 app.post('/addToDatabase',function(req, resp){
@@ -106,13 +107,13 @@ app.get('/showQRCodes', function(req, resp){
 	    	for(var i=0; i < rows.length; i++){
 	    		//bufferBase64 += new Buffer( rows[i].image, 'binary' ).toString('base64');
 	    		console.log("title::" + rows[i].image_title)
-	    		fs.writeFile('public/img/' + rows[i].image_title + '.png', rows[i].image);
-	    		if(rows[i].image){
+	    		/*fs.writeFile('public/img/' + rows[i].image_title + '.png', rows[i].image);*/
+	    		/*if(rows[i].image){*/
 	    			rows[i].path = '../img/' + rows[i].image_title + '.png';
-	    			rows[i].image = "";
-	    		} else {
+	    			/*rows[i].image = "";*/
+	    		/*} else {
 	    			rows[i].path = "null";
-	    		}
+	    		}*/
 	    	}
 	    	resp.send(JSON.stringify(rows));
 	    	console.log(rows);
@@ -135,13 +136,13 @@ app.get('/getImageDetails', function(req, resp){
 	   	if (!err){
 	    	console.log('The solution is: ', rows);
 	    	for(var i=0; i < rows.length; i++){
-	    		fs.writeFile('public/img/' + rows[i].image_title + '.png', rows[i].image);
-	    		if(rows[i].image){
+	    		/*fs.writeFile('public/img/' + rows[i].image_title + '.png', rows[i].image);
+	    		if(rows[i].image){*/
 	    			rows[i].path = '../img/' + rows[i].image_title + '.png';
-	    			rows[i].image = "";
+	    			/*rows[i].image = "";
 	    		} else {
 	    			rows[i].path = "null";
-	    		}
+	    		}*/
 	    	}
 	    	resp.send(JSON.stringify(rows));
 	    	console.log(rows);
@@ -171,47 +172,24 @@ app.get('/downloadImages', function(req, resp){
 	   	if (!err){
 	    	console.log('The solution is: ', rows);
 	    	for(var i=0; i < rows.length; i++){
-	    		
-	    		if(rows[i].image){
-	    			rows[i].path = rows[i].image_title + '.png';
-	    			rows[i].image = "";
-	    			fileNames.push(rows[i].path);
-	    		} else {
-	    			rows[i].path = "null";
-	    		}
+				rows[i].path = rows[i].image_title + '.png';
+				rows[i].image = "";
+				fileNames.push(rows[i].path);
 	    	}
+	    	var downloadName = 'Download' + uuid() + '.zip';
+	    	console.log("Dwl Name:: " + downloadName);
 	    	var archive  	   = archiver('zip');
-	    	var output = fs.createWriteStream(__dirname + '/public/Download.zip');
+	    	var output = fs.createWriteStream(__dirname + '/public/' + downloadName);
 	    	archive.pipe(output);
 	    	for(i=0; i<fileNames.length; i++){
 				var path = __dirname + '/public/img/'+fileNames[i];
 				console.log("path::" + path);
 				archive.append(getStream(path), { name: fileNames[i]});
 			}
-			/*archive.finalize(function(err, bytes) {
-			  if (err) {
-			    resp.status(400).send({data: err});
-			  }else{
-			  	resp.setHeader('Content-Type', 'application/json');
-				resp.send(JSON.stringify({totalBytes: archive.pointer(), name: 'Download.zip'}));
-				console.log(archive.pointer() + ' total bytes');
-			  }
-			});*/
-			// listen for all archive data to be written
-			/*output.on('close', function() {
-				resp.writeHead(200, {
-		          "Content-Type": "application/octet-stream",
-		          "Content-Disposition" : "attachment; filename='Download.zip'"});
-				console.log("Location :: " + __dirname+ '/public/Download.zip');
-		        fs.createReadStream(__dirname+ '/public/Download.zip').pipe(resp);
-				console.log(archive.pointer() + 'close total bytes');
-				
-				console.log(archive.pointer() + ' resp.download close total bytes');
-				resp.download(__dirname + '/public/Download.zip');
-			});*/
+			
 			output.on('close', function() {
 				resp.setHeader('Content-Type', 'application/json');
-				resp.send(JSON.stringify({totalBytes: archive.pointer(), name: 'Download.zip'}));
+				resp.send(JSON.stringify({totalBytes: archive.pointer(), name: downloadName}));
 				console.log(archive.pointer() + ' total bytes');
 			});
 			archive.finalize();

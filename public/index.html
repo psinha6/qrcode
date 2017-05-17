@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<base href="/">
-
+	<!-- <base href="/"> -->
 	<title>QR code Generator</title>
 
 	<!-- CSS -->
@@ -12,7 +11,7 @@
 
 	<!-- JS -->
 	<script src="libs/angular/angular.min.js"></script>
-	<script src="libs/angular-route/angular-route.min.js"></script>
+	<script src="libs/angular-ui-router/release/angular-ui-router.min.js"></script>
 	<script src="libs/jquery/dist/jquery.min.js"></script>
 	<link href="css/style.css" rel="stylesheet">
 	<script src="js/kjua-0.1.1.min.js"></script>
@@ -38,8 +37,7 @@
 			<a class="navbar-brand" href="/">Generate QR codes</a>
 		</div>
 		<ul class="nav navbar-nav">
-			<li><a href="/nerds">View QR codes</a></li>
-			<li><a href="/geeks">Add Mapping</a></li>
+			<li><a href="changePage()">View QR codes</a></li>
 		</ul>
 	</nav>
 
@@ -103,7 +101,7 @@
 			<label for="image">IMAGE</label><input id="image" type="file">
 		</div><img id="img-buffer" src="dummy.png">
 	</div>	
-	<div ng-view></div>
+	<div ui-view></div>
 
 </div>
 <script src="js/scripts.js"></script>

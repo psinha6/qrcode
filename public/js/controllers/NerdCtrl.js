@@ -7,7 +7,7 @@ angular.module('NerdCtrl', []).controller('NerdController', function($scope, $ht
 	$scope.showStuff = function(){
 		$http({
           method: 'GET',
-          url: '/showQRCodes'
+          url: Nerd.serverUrl + '/showQRCodes'
         }).then(function successCallback(response) {
             console.log("Image saved successfully :: " + JSON.stringify(response));
             $scope.qrcodes = response.data;
@@ -20,14 +20,21 @@ angular.module('NerdCtrl', []).controller('NerdController', function($scope, $ht
     console.log(desc);
     Nerd.imageid = desc;
     Nerd.printImageId();
-    $location.path( 'geeks' );
+    $location.path( '/geeks' );
   }
 	$scope.zipDownload = function(filterData, filterData1){
-    filterData += filterData1;
+    if(filterData){
+      if(filterData1){
+        filterData = filterData + "-" + filterData1;
+      }
+    } else {
+      filterData = filterData1;  
+    }
+    
     console.log("zipDownload filterData:: " + filterData)
     $http({
           method: 'GET',
-          url: '/downloadImages',
+          url: Nerd.serverUrl + '/downloadImages',
           params: {filterData: filterData}
         }).then(function successCallback(response) {
           console.log("Image saved successfully :: " + JSON.stringify(response));
@@ -41,4 +48,10 @@ angular.module('NerdCtrl', []).controller('NerdController', function($scope, $ht
   $scope.generateNewQR = function(){
     $location.path( '/' );
   }
+
+  $scope.changePage = function(){
+   
+     $location.path( '/nerds' );
+  }
+
 });
