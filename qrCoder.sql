@@ -22,8 +22,7 @@ CREATE TABLE qrImageTable(
    Select * from qrImageTable;
 
    
-   INSERT INTO qrImageTable (image_title, image_description, image_pgno) values ('Grade3syllabusNoEnglishpageno12,connection.conne
-ct();,12')
+   INSERT INTO qrImageTable (image_title, image_description, image_pgno) values ('Grade3syllabusNoEnglishpageno12,connection.connect();,12')
 
 truncate table qrImageTable;
 
