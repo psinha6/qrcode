@@ -1,17 +1,18 @@
 angular.module('NerdService', []).service('Nerd', ['$http', function($http) {
 
-     this.serverUrl = "192.168.10.40:8080";
+     this.serverUrl = "";//"192.168.10.40:8080";
 	this.imageid;
 	this.printImageId = function(){
 		console.log("From Service" + this.imageid);
 	}
      this.text = "www.nextcurriculum.in/app/qrcode/3";
-     this.options = "{"render":"image","crisp":true,"ecLevel":"H","minVersion":1,"fill":"#333333","back":"#ffffff","text":this.text,"size":43,"rounded":70,"quiet":2,"mode":"label","mSize":30,"mPosX":50,"mPosY":50,"label":"","fontname":"Ubuntu","fontcolor":"#ff9818","image":{}}";
+    // this.options = "{"render":"image","crisp":true,"ecLevel":"H","minVersion":1,"fill":"#333333","back":"#ffffff","text":this.text,"size":43,"rounded":70,"quiet":2,"mode":"label","mSize":30,"mPosX":50,"mPosY":50,"label":"","fontname":"Ubuntu","fontcolor":"#ff9818","image":{}}";
 
      this.getImage = function(){
           return kjua(options);
      }
      
+     this.booktypes =  ["Demo","CBSE","ICSE","East Edition","South Edition"]
 	this.syllabusData = [
                     {"Syllabus": "1010853", "Subject": "English", "Class": "Nursery"},
                     {"Syllabus": "1010590", "Subject": "English", "Class": "5"},

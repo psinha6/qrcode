@@ -4,15 +4,15 @@ use qrCode;
 CREATE TABLE qrImageTable(
    image_id INT NOT NULL AUTO_INCREMENT,
    image_title VARCHAR(100) NOT NULL unique,
-   image_description varchar(100) NOT NULL,
-   image_pgno varchar(30),
+   image_description varchar(250) NOT NULL,
    class_name varchar(50), 
    subject_name varchar(50),
    chapter_no varchar(50),
    chapter_name varchar(50),
-   concept_name varchar(50),
+   created_on DATETIME NOT NULL DEFAULT NOW(), 
+   book_type varchar(50) NOT NULL,
    PRIMARY KEY ( image_id )
-   );
+);
    
    INSERT INTO qrImageTable (image_title, image_description, image_pgno) values ('Grade1SubjectSciencePgno13', 'desc1', 'pg13');
    show databases;
@@ -20,7 +20,7 @@ CREATE TABLE qrImageTable(
    
    
    Select * from qrImageTable;
-
+	delete from qrImageTable where image_id=7
    
    INSERT INTO qrImageTable (image_title, image_description, image_pgno) values ('Grade3syllabusNoEnglishpageno12,connection.connect();,12')
 

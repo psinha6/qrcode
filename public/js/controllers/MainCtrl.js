@@ -5,8 +5,102 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
 	$scope.qrCode;
 	$scope.isQRGenerated = false;
 	$scope.classNames = ['1', '2', '3', '4', '5', '6', '7', '8'];
+    $scope.booktypes = Nerd.booktypes;
 
-	//$scope.tagline = 'To the moon and back!';
+
+    
+
+    $scope.uploadJsondataToGenerateQR = function(){
+        try {
+            var o = JSON.parse($scope.jsonData);
+            if (o && typeof o === "object") {
+                console.log("Valid JSON format");
+                for(var i = 0; i < o.length; i++){
+                    console.log( o[i].bookType);
+                    console.log( o[i].class);
+                    console.log( o[i].subject);
+                    console.log( o[i].chNo);
+                    console.log( o[i].chapterName);
+                    console.log( o[i].descriptionOfTheVideo);
+                    $scope.genBulkQR(o[i])
+                }
+            }
+        }
+        catch (e) {
+            console.log("NOT a valid JSON format " + e);
+        }
+        return false;
+    }
+
+    $scope.genBulkQR = function(qrObject){
+
+        var title = 'Grade' + qrObject.class + '-' + qrObject.subject + '-ChNo' + qrObject.chNo;
+        $http({
+              method: 'POST',
+              url: Nerd.serverUrl + '/addToDatabase',
+              data: {image_title: title, 
+                    image_description: qrObject.descriptionOfTheVideo, 
+                    /*image_pgno : $scope.pageNo,*/
+                    class_name: $scope.className,
+                    subject_name: $scope.syllabusNo, // SubjectName
+                    chapter_no: $scope.chapterNo,
+                    chapter_name: $scope.chapterName,
+                    book_name: $scope.booktype
+                }
+            }).then(function successCallback(response) {
+            console.log("Image saved successfully :: " + JSON.stringify(response.data));
+            var image_id = response.data[0].image_id;
+            var image_title = response.data[0].image_title;
+            var url = "www.nextcurriculum.in/app/qrcode/" + $scope.imageid;
+            console.log("URL::" + url);
+            $('#text').val(url);
+            //$('#label').val($scope.pageNo);
+            //update();
+            var options = JSON.parse({
+                "render":"image",
+                "crisp":true,
+                "ecLevel":"H",
+                "minVersion":1,
+                "fill":"#333333",
+                "back":"#ffffff",
+                "text":url,
+                "size":43,
+                "rounded":70,
+                "quiet":2,
+                "mode":"label",
+                "mSize":30,
+                "mPosX":50,
+                "mPosY":50,
+                "label":"",
+                "fontname":"Ubuntu",
+                "fontcolor":"#ff9818",
+                "image":{}
+            });
+            var container = elById('container');
+            var qrcode = kjua(options);
+            src = qrcode.src;
+
+            $http({
+              method: 'POST',
+              url: Nerd.serverUrl + '/saveImage',
+              data: {image: src, image_id: image_id, image_title : image_title}
+            }).then(function successCallback(response) {
+                console.log("Image saved successfully :: " + JSON.stringify(response));
+                /*$scope.title = "";*/
+              }, function errorCallback(response) {
+                console.log("Error could not save image::" + JSON.stringify(response));
+              });
+            }, function errorCallback(response) {
+               console.log("Error could not save image::" + JSON.stringify(response));
+               if(response.data.data.code == "ER_DUP_ENTRY"){
+                    $scope.generalText = "Image not saved. Image with same name is already generated" ; 
+               } else {
+                    $scope.generalText = "Image not saved";
+               }
+               
+            });
+    }
+	
 	$scope.generateQRCode = function(){
         // +++++++++++++++++++++++++++++++++ Validations begin +++++++++++++++++++++++++++++++++//
         var error = "Please enter"
@@ -16,18 +110,18 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
         if(!$scope.syllabusNo){
             error += " subject name";
         }
-        if(!$scope.pageNo){
+        /*if(!$scope.pageNo){
             error += " page number";
-        }
+        }*/
         if(!$scope.chapterNo){
             error += " chapter number";
         }
         if(!$scope.chapterName){
             error += " chapter name";
         }
-        if(!$scope.conceptName){
+        /*if(!$scope.conceptName){
             error += " concept name";
-        }
+        }*/
         if(!$scope.description){
             error += " description";
         }
@@ -39,22 +133,23 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
         // +++++++++++++++++++++++++++++++++ Validations ends +++++++++++++++++++++++++++++++++//
         if(!$scope.isQRGenerated == true){
             $scope.imageid;
-		    $scope.title = 'Grade' + $scope.className + '-' + $scope.syllabusNo + '-PgNo' + $scope.pageNo;
+		    $scope.title = 'Grade' + $scope.className + '-' + $scope.syllabusNo + '-ChNo' + $scope.chapterNo;
 		    $http({
               method: 'POST',
               url: Nerd.serverUrl + '/addToDatabase',
               data: {image_title: $scope.title, 
                     image_description: $scope.description, 
-                    image_pgno : $scope.pageNo,
+                    /*image_pgno : $scope.pageNo,*/
                     class_name: $scope.className,
-                    subject_name: $scope.syllabusNo,
+                    subject_name: $scope.syllabusNo, // SubjectName
                     chapter_no: $scope.chapterNo,
                     chapter_name: $scope.chapterName,
-                    concept_name: $scope.conceptName
+                    book_name: $scope.booktype
                 }
             }).then(function successCallback(response) {
 	        console.log("Image saved successfully :: " + JSON.stringify(response.data));
             $scope.imageid = response.data[0].image_id;
+            $scope.title = response.data[0].image_title;
             var url = "www.nextcurriculum.in/app/qrcode/" + $scope.imageid;
             console.log("URL::" + url);
             $('#text').val(url);
@@ -85,9 +180,9 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
         $scope.syllabusNo = "";
         $scope.chapterNo = "";
         $scope.chapterName = "";
-        $scope.conceptName = "";
         $scope.pageNo = "";
         $scope.description = "";
+        $scope.booktype = "";
         console.log("Data clean");
     }
 	$scope.download = function(){

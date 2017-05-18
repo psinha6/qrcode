@@ -72,31 +72,61 @@ app.post('/saveImage',function(req, resp){
 app.post('/addToDatabase',function(req, resp){
 	var dataObject = req.body;
 	
-	var sql = "INSERT INTO qrImageTable (image_title, image_description, image_pgno, class_name, subject_name, chapter_no, chapter_name, concept_name) values ('" + 
-	dataObject.image_title + "','" + dataObject.image_description + "','" + dataObject.image_pgno + "','" + dataObject.class_name + 
-	"','" + dataObject.subject_name + "','" + dataObject.chapter_no + "','" + dataObject.chapter_name + "','" + dataObject.concept_name + "')";
-	console.log("SQL::" + sql);
-
-	connection.query(sql, function (err, result) {
+	var sqlq = "Select image_title from qrImageTable where image_title LIKE '%" + dataObject.image_title + "%'";
+	console.log("SQL::" + sqlq);
+	connection.query(sqlq, function (err, rows, fields) {
 	    if (err){
 	    	console.log("Error " + err);
 	    	resp.status(400).send({data: err});
 	    	return;
 	    } else{
-	    	console.log("1 record inserted" + JSON.stringify(result));	
-			connection.query("SELECT * from qrImageTable where image_title = '" + dataObject.image_title + "'", function(err, rows, fields) {
-			   	if (!err){
-			    	console.log('The solution is: ', rows);
-			    	resp.send(rows);
-			   	}
-			    else{
-			     	console.log('Error while performing Query.' + err);
-			     	resp.status(400).send({data: err});
-			    }
-			   
-			});
+		    if (!err){
+		    	console.log('The solution is: ', rows);
+		    	if(rows.length == 0){
+		    		dataObject.image_title += '_1';
+		    	} else {
+		    		var num = Number((rows[rows.length -1].image_title).split('_')[1]) + 1;
+		    		console.log("rows[rows.length -1]" + rows[rows.length -1]);
+		    		console.log("rows[rows.length -1][(rows[rows.length -1]).length-1]" + rows[rows.length -1][(rows[rows.length -1]).length-1]);
+		    		console.log("addToDatabase:: current num" + rows[rows.length -1][(rows[rows.length -1]).length-1]);
+		    		dataObject.image_title = dataObject.image_title + '_' + num;
+		    	}
+
+		    	// insert to database now
+		    	var sql = "INSERT INTO qrImageTable (image_title, image_description, class_name, subject_name, chapter_no, chapter_name, book_type) values ('" + 
+				dataObject.image_title + "','" + dataObject.image_description + "','" + dataObject.class_name + 
+				"','" + dataObject.subject_name + "','" + dataObject.chapter_no + "','" + dataObject.chapter_name + "','" + dataObject.book_name + "')";
+				console.log("SQL::" + sql);
+
+				connection.query(sql, function (err, result) {
+				    if (err){
+				    	console.log("Error " + err);
+				    	resp.status(400).send({data: err});
+				    	return;
+				    } else{
+				    	console.log("1 record inserted" + JSON.stringify(result));	
+						connection.query("SELECT * from qrImageTable where image_title = '" + dataObject.image_title + "'", function(err, rows, fields) {
+						   	if (!err){
+						    	console.log('The solution is: ', rows);
+						    	resp.send(rows);
+						   	}
+						    else{
+						     	console.log('Error while performing Query.' + err);
+						     	resp.status(400).send({data: err});
+						    }
+						   
+						});
+				    }
+				});
+		   	}
+		    else{
+		     	console.log('Error while performing Query.' + err);
+		     	resp.status(400).send({data: err});
+		    }
 	    }
 	});
+
+		
 	
 });
 

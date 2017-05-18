@@ -1,22 +1,6 @@
 <div class="container-fluid" ng-init="showStuff()">
   <div class="row">
-    <!-- <div class="col-md-2">
-
-	    <div class="form-horizontal mb2">
-		    <label class="control-label">Search:</label>
-		    <input class="form-control" ng-model="filterData" />
-	  	</div>
-	  	<div>
-	  		<label class="control-label">Create zip for current result</label>
-	  		<div class="zipLink" ng-click="zipDownload(filterData)">
-	  			<img src="../img/zipIt.png" class="mt1 mb1">
-	  		</div>
-	  		<a href="{{filesZipped}}" class="btn btn-primary" ng-show="filesZipped" target="_blank">Download</a>
-	  	</div>
-  	</div> -->
-
   	<div class="col-md-10 text-left center-block">
-
   		<div class="form-horizontal mb3 clearfix">
 	 		<div class="col-xs-5 col-sm-4 col-lg-3">
 		 		<div class="form-group">
@@ -42,36 +26,18 @@
 
 			<button class="btn btn-success pull-left clearBoth" ng-click="generateNewQR()">Create New</button>
 		</div>
-
-  		<!--<ul class="phones w100 clearfix">
-	        <li ng-repeat="qrcode in qrcodes | filter:filterData" class="thumbnail phone-list-item">
-	          
-	          <div>
-		          <a href="" class="block m-b-10">{{qrcode.image_title}}</a>
-		          <p class="m-b-10"> Description {{qrcode.image_description}}</p>
-		          <p class="m-b-10">Page No: {{qrcode.image_pgno}}</p>
-		          <a href="{{qrcode.path}}" download="{{qrcode.image_title}}" target="_blank">Download
-	            		 <img src="{{qrcode.path}}" alt="{{qrcode.name}}" class="imageSmall"/> 
-	          	  </a>
-	          </div>
-	          <div style="width: 30px;height: 30px; float: right;" ng-click="addMappingToImage(qrcode.image_title)">
-	          	<img src="../img/add.png" alt="add mapping" style="width: 100%; height: 100%" />
-	          </div>
-	        </li>
-	    </ul>-->
-
 	    <table class="table table-striped">
 		    <thead>
 		    	<tr>
 		    		<th>ID</th>
 		    		<th>Title</th>
 		    		<th>Description</th>
-		    		<th>Page No</th>
+		    		<!-- <th>Page No</th> -->
 		    		<th>Class</th>
 		    		<th>Subject</th>
 		    		<th>Chapter Number</th>
 		    		<th>Chapter Name</th>
-		    		<th>Concept</th>
+		    		<!-- <th>Concept</th> -->
 		    		<th>Download</th>
 		    		<th>Mapping</th>
 		    	</tr>
@@ -81,12 +47,12 @@
 		    		<td>{{qrcode.image_id}}</td>
 		    		<td>{{qrcode.image_title}}</td>
 		    		<td>{{qrcode.image_description}}</td>
-		    		<td>{{qrcode.image_pgno}}</td>
+		    		<!-- <td>{{qrcode.image_pgno}}</td> -->
 		    		<td>{{qrcode.class_name}}</td>
 		    		<td>{{qrcode.subject_name}}</td>
 		    		<td>{{qrcode.chapter_no}}</td>
 		    		<td>{{qrcode.chapter_name}}</td>
-		    		<td>{{qrcode.concept_name}}</td>
+		    		<!-- <td>{{qrcode.concept_name}}</td> -->
 		    		<td>
 		    			<a href="{{qrcode.path}}" download="{{qrcode.image_title}}" target="_blank">Download</a>
 		    		</td>
