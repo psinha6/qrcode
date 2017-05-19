@@ -15,13 +15,42 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
             var o = JSON.parse($scope.jsonData);
             if (o && typeof o === "object") {
                 console.log("Valid JSON format");
+                $scope.counter = 0;
+                $scope.total = o.length;
+                $scope.failCounter = 0;
                 for(var i = 0; i < o.length; i++){
                     console.log( o[i].bookType);
                     console.log( o[i].class);
                     console.log( o[i].subject);
                     console.log( o[i].chNo);
+                    o[i].chapterName = o[i].chapterName.split("'").join("\'");
                     console.log( o[i].chapterName);
-                    console.log( o[i].descriptionOfTheVideo);
+
+                    console.log( o[i].description);
+                    $scope.generalText = "";
+
+                    if(!o[i].bookType){
+                        $scope.generalText += "bookType "
+                    }
+                    if(!o[i].class){
+                        $scope.generalText += "class "
+                    }
+                    if(!o[i].subject){
+                        $scope.generalText += "subject "
+                    }
+                    if(!o[i].chNo){
+                        $scope.generalText += "chNo "
+                    }
+                    if(!o[i].chapterName){
+                        $scope.generalText += "chapterName "
+                    }
+                    if(!o[i].description){
+                        $scope.generalText += "description "
+                    }
+                    if($scope.generalText){
+                        $scope.generalText = "Incorrect " + $scope.generalText
+                        return;
+                    }
                     $scope.genBulkQR(o[i])
                 }
             }
@@ -39,24 +68,23 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
               method: 'POST',
               url: Nerd.serverUrl + '/addToDatabase',
               data: {image_title: title, 
-                    image_description: qrObject.descriptionOfTheVideo, 
-                    /*image_pgno : $scope.pageNo,*/
-                    class_name: $scope.className,
-                    subject_name: $scope.syllabusNo, // SubjectName
-                    chapter_no: $scope.chapterNo,
-                    chapter_name: $scope.chapterName,
-                    book_name: $scope.booktype
+                    image_description: qrObject.description, 
+                    class_name: qrObject.class,
+                    subject_name: qrObject.subject, // SubjectName
+                    chapter_no: qrObject.chNo,
+                    chapter_name: qrObject.chapterName,
+                    book_name: qrObject.bookType
                 }
             }).then(function successCallback(response) {
             console.log("Image saved successfully :: " + JSON.stringify(response.data));
             var image_id = response.data[0].image_id;
             var image_title = response.data[0].image_title;
-            var url = "www.nextcurriculum.in/app/qrcode/" + $scope.imageid;
+            var url = "www.nextcurriculum.in/app/qrcode/" + image_id;
             console.log("URL::" + url);
             $('#text').val(url);
             //$('#label').val($scope.pageNo);
             //update();
-            var options = JSON.parse({
+            var options = {
                 "render":"image",
                 "crisp":true,
                 "ecLevel":"H",
@@ -75,7 +103,8 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
                 "fontname":"Ubuntu",
                 "fontcolor":"#ff9818",
                 "image":{}
-            });
+            };
+            console.log(JSON.stringify(options));
             var container = elById('container');
             var qrcode = kjua(options);
             src = qrcode.src;
@@ -86,21 +115,88 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
               data: {image: src, image_id: image_id, image_title : image_title}
             }).then(function successCallback(response) {
                 console.log("Image saved successfully :: " + JSON.stringify(response));
+                $scope.counter++;
+                console.log("Saved counter "  + $scope.counter);
+                if($scope.counter == $scope.total){
+                    $scope.generalText = "Successfully uploaded " + $scope.counter + ".";
+                }
                 /*$scope.title = "";*/
               }, function errorCallback(response) {
                 console.log("Error could not save image::" + JSON.stringify(response));
+                $scope.generalText = "Error";
+                $scope.failCounter++;
               });
             }, function errorCallback(response) {
                console.log("Error could not save image::" + JSON.stringify(response));
+               $scope.failCounter++;
                if(response.data.data.code == "ER_DUP_ENTRY"){
                     $scope.generalText = "Image not saved. Image with same name is already generated" ; 
                } else {
                     $scope.generalText = "Image not saved";
                }
-               
             });
     }
 	
+
+    function onChange(event) {
+        var reader = new FileReader();
+        reader.onload = onReaderLoad;
+        reader.readAsText(event.target.files[0]);
+    }
+
+    function onReaderLoad(event){
+        console.log(event.target.result);
+        try {
+            var o = JSON.parse(event.target.result);
+            if (o && typeof o === "object") {
+                console.log("Valid JSON format");
+                $scope.counter = 0;
+                $scope.total = o.length;
+                $scope.failCounter = 0;
+                for(var i = 0; i < o.length; i++){
+                    console.log( o[i].bookType);
+                    console.log( o[i].class);
+                    console.log( o[i].subject);
+                    console.log( o[i].chNo);
+                    //o[i].chapterName = o[i].chapterName.split("'").join("\'");
+                    console.log( o[i].chapterName);
+
+                    console.log( o[i].description);
+                    $scope.generalText = "";
+
+                    if(!o[i].bookType){
+                        $scope.generalText += "bookType "
+                    }
+                    if(!o[i].class){
+                        $scope.generalText += "class "
+                    }
+                    if(!o[i].subject){
+                        $scope.generalText += "subject "
+                    }
+                    if(!o[i].chNo){
+                        $scope.generalText += "chNo "
+                    }
+                    if(!o[i].chapterName){
+                        $scope.generalText += "chapterName "
+                    }
+                    if(!o[i].description){
+                        $scope.generalText += "description "
+                    }
+                    if($scope.generalText){
+                        $scope.generalText = "Incorrect " + $scope.generalText
+                        return;
+                    }
+                    //$scope.genBulkQR(o[i])
+                }
+            }
+        }
+        catch (e) {
+            console.log("NOT a valid JSON format " + e);
+        }
+    }
+ 
+    document.getElementById('file').addEventListener('change', onChange);
+
 	$scope.generateQRCode = function(){
         // +++++++++++++++++++++++++++++++++ Validations begin +++++++++++++++++++++++++++++++++//
         var error = "Please enter"

@@ -8,6 +8,7 @@ var fs 			   = require('file-system');
 var archiver 	   = require('archiver');
 var uuid 		   = require("uuid/v1")
 var mysql          = require('mysql');
+var locks          = require('locks');
 // configuration ===========================================
 	
 var connection = mysql.createConnection({
@@ -37,7 +38,7 @@ var connection = mysql.createConnection({
 // config files
 var db = require('./config/db');
 
-var port = process.env.PORT || 8080; // set our port
+var port = process.env.PORT || 9000; // set our port
 // mongoose.connect(db.url); // connect to our mongoDB database (commented out after you enter in your own credentials)
 
 // get all data/stuff of the body (POST) parameters
@@ -68,10 +69,12 @@ app.post('/saveImage',function(req, resp){
 	});*/
 	resp.send("Success");
 });
-
+var mutex = locks.createMutex();
 app.post('/addToDatabase',function(req, resp){
+	
 	var dataObject = req.body;
 	
+	mutex.lock(function () {
 	var sqlq = "Select image_title from qrImageTable where image_title LIKE '%" + dataObject.image_title + "%'";
 	console.log("SQL::" + sqlq);
 	connection.query(sqlq, function (err, rows, fields) {
@@ -86,22 +89,24 @@ app.post('/addToDatabase',function(req, resp){
 		    		dataObject.image_title += '_1';
 		    	} else {
 		    		var num = Number((rows[rows.length -1].image_title).split('_')[1]) + 1;
-		    		console.log("rows[rows.length -1]" + rows[rows.length -1]);
-		    		console.log("rows[rows.length -1][(rows[rows.length -1]).length-1]" + rows[rows.length -1][(rows[rows.length -1]).length-1]);
-		    		console.log("addToDatabase:: current num" + rows[rows.length -1][(rows[rows.length -1]).length-1]);
+		    		console.log("New Number to append = " + num);
 		    		dataObject.image_title = dataObject.image_title + '_' + num;
 		    	}
+				/*dataObject.image_description
+				dataObject.image_description = dataObject.image_description.split("'").join("\'");
+				dataObject.chapter_name = dataObject.chapter_name.split("'").join("\'");*/
 
 		    	// insert to database now
 		    	var sql = "INSERT INTO qrImageTable (image_title, image_description, class_name, subject_name, chapter_no, chapter_name, book_type) values ('" + 
-				dataObject.image_title + "','" + dataObject.image_description + "','" + dataObject.class_name + 
-				"','" + dataObject.subject_name + "','" + dataObject.chapter_no + "','" + dataObject.chapter_name + "','" + dataObject.book_name + "')";
+				dataObject.image_title + "'," + JSON.stringify(dataObject.image_description) + ",'" + dataObject.class_name + 
+				"','" + dataObject.subject_name + "','" + dataObject.chapter_no + "'," + JSON.stringify(dataObject.chapter_name) + ",'" + dataObject.book_name + "')";
 				console.log("SQL::" + sql);
 
 				connection.query(sql, function (err, result) {
 				    if (err){
 				    	console.log("Error " + err);
 				    	resp.status(400).send({data: err});
+				    	mutex.unlock();
 				    	return;
 				    } else{
 				    	console.log("1 record inserted" + JSON.stringify(result));	
@@ -109,10 +114,12 @@ app.post('/addToDatabase',function(req, resp){
 						   	if (!err){
 						    	console.log('The solution is: ', rows);
 						    	resp.send(rows);
+						    	mutex.unlock();
 						   	}
 						    else{
 						     	console.log('Error while performing Query.' + err);
 						     	resp.status(400).send({data: err});
+						     	mutex.unlock();
 						    }
 						   
 						});
@@ -124,10 +131,8 @@ app.post('/addToDatabase',function(req, resp){
 		     	resp.status(400).send({data: err});
 		    }
 	    }
+	});	
 	});
-
-		
-	
 });
 
 app.get('/showQRCodes', function(req, resp){
