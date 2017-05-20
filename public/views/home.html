@@ -29,7 +29,7 @@
 				<select class="selectpicker form-control" ng-model="booktype" ng-options="x for x in booktypes"></select>
 			</div>
 		</div>
-		<div class="col-xs-offset-1 col-xs-6">
+		<div class="col-xs-offset-1 col-xs-5">
 			<div class="form-group">	
 				<label class="control-label text-left">Chapter Name</label>
 				<input  class="form-control" ng-model="chapterName" type="text">
@@ -101,11 +101,16 @@
 		</div>
 
 
-		<div class="col-xs-12 col-sm-8 center-block text-center">
-			<textarea class="form-control mb2 textAreaResizeY" rows="4" ng-model="jsonData" placeholder="Enter JSON data for Bulk upload" required></textarea>
+		<div class="col-xs-12 center-block text-center" style="position: relative;top: 29px;">
+			<!-- <textarea class="form-control mb2 textAreaResizeY" rows="4" ng-model="jsonData" placeholder="Enter JSON data for Bulk upload" required></textarea> -->
 			
-			<button class="btn btn-md btn-primary outline-none" ng-click="uploadJsondataToGenerateQR()">Generate Bulk</button>
-			<input id="file" type="file" />
+			<!-- <button class="btn btn-md btn-primary outline-none" ng-click="uploadJsondataToGenerateQR()">Generate Bulk</button> -->
+			<!-- <input id="file" type="file" class="btn btn-md btn-primary outline-none"/> -->
+			<label class="btn btn-primary" for="file">
+    			<input id="file" type="file" style="display:none;">
+    				Select proper json file to bulk upload
+			</label>
+
 		</div>
 
 	</div>		

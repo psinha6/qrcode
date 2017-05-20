@@ -1,24 +1,19 @@
 angular.module('appRoutes', []).config(['$stateProvider','$urlRouterProvider', '$locationProvider', function( $stateProvider,$urlRouterProvider, $locationProvider) {
 
-	 $stateProvider
-		 .state('/', {
+	$stateProvider
+	.state('/', {
           url: '/',
           templateUrl: 'views/home.html',
 			controller: 'MainController'
-      })
-
-		  .state('nerds', {
-          url: '/nerds',
-         templateUrl: 'views/nerd.html',
-			controller: 'NerdController'
-      })
-
-
-		  .state('geeks', {
-          url: '/geeks',
-         templateUrl: 'views/geek.html',
-			controller: 'GeekController'
-      })
+    }).state('nerds', {
+        url: '/nerds',
+        templateUrl: 'views/nerd.html',
+		controller: 'NerdController'
+    }).state('geeks', {
+        url: '/geeks',
+        templateUrl: 'views/geek.html',
+		controller: 'GeekController'
+    })
 
 
 	

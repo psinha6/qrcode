@@ -3,7 +3,7 @@ angular.module('NerdCtrl', []).controller('NerdController', function($scope, $ht
 	$("#qrgenerator").css("display", "none");
   $scope.classNames = Nerd.classNames;
   $scope.subjects = Nerd.subjects;
-
+  Nerd.isConnected();
 	$scope.showStuff = function(){
 		$http({
           method: 'GET',
@@ -49,8 +49,8 @@ angular.module('NerdCtrl', []).controller('NerdController', function($scope, $ht
     $location.path( '/' );
   }
 
-  $scope.changePage = function(){
-   
+  $scope.changePage = function(loc){
+   console.log('/' + loc)
      $location.path( '/nerds' );
   }
 

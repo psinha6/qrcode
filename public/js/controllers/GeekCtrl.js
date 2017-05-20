@@ -6,7 +6,7 @@ angular.module('GeekCtrl', []).controller('GeekController', function($scope, $ht
 	$scope.isSuccess = false;
 	$scope.Board = "NextCurriculum";
 	$scope.editAsset = true;
-
+	Nerd.isConnected();
 	$scope.getQRDetails = function(){
 		console.log("Image id from server" + Nerd.imageid);
 		$http({

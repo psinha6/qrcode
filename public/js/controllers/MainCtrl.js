@@ -7,7 +7,7 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
 	$scope.classNames = ['1', '2', '3', '4', '5', '6', '7', '8'];
     $scope.booktypes = Nerd.booktypes;
 
-
+    Nerd.isConnected();
     
 
     $scope.uploadJsondataToGenerateQR = function(){
@@ -186,7 +186,7 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
                         $scope.generalText = "Incorrect " + $scope.generalText
                         return;
                     }
-                    //$scope.genBulkQR(o[i])
+                    $scope.genBulkQR(o[i])
                 }
             }
         }
@@ -212,20 +212,23 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
         if(!$scope.chapterNo){
             error += " chapter number";
         }
+        
         if(!$scope.chapterName){
             error += " chapter name";
         }
-        /*if(!$scope.conceptName){
-            error += " concept name";
-        }*/
+        
         if(!$scope.description){
             error += " description";
         }
         if(error.length > 12){
+            console.log(error);
             alert(error);
             return;
         }
-        console.log(error);
+        $scope.chapterName = $scope.chapterName.split("'").join("\\'");
+        $scope.chapterName = $scope.chapterName.split("\"").join("\\\"");
+        $scope.description = $scope.description.split("'").join("\\'");
+        $scope.description = $scope.description.split("\"").join("\\\"");
         // +++++++++++++++++++++++++++++++++ Validations ends +++++++++++++++++++++++++++++++++//
         if(!$scope.isQRGenerated == true){
             $scope.imageid;
@@ -500,6 +503,4 @@ angular.module('MainCtrl', []).controller('MainController', function($scope, $ht
                     {"Syllabus": "1010869", "Subject": "Hindi", "Class": "UKG"},
                     {"Syllabus": "1010868", "Subject": "Hindi", "Class": "LKG"}
                 ];
-
-    Nerd.subjects = ["Hindi", "EVS", "Social_Studies", "Science", "Maths", "English", "Sanskrit"];
 });

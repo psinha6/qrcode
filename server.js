@@ -92,14 +92,17 @@ app.post('/addToDatabase',function(req, resp){
 		    		console.log("New Number to append = " + num);
 		    		dataObject.image_title = dataObject.image_title + '_' + num;
 		    	}
-				/*dataObject.image_description
-				dataObject.image_description = dataObject.image_description.split("'").join("\'");
-				dataObject.chapter_name = dataObject.chapter_name.split("'").join("\'");*/
+				
+				dataObject.image_description = dataObject.image_description.split("'").join("\\'");
+				dataObject.chapter_name = dataObject.chapter_name.split("'").join("\\'");
+
+				console.log("dataObject.image_description::" + dataObject.image_description);
+				console.log("dataObject.chapter_name::" + dataObject.chapter_name);
 
 		    	// insert to database now
 		    	var sql = "INSERT INTO qrImageTable (image_title, image_description, class_name, subject_name, chapter_no, chapter_name, book_type) values ('" + 
-				dataObject.image_title + "'," + JSON.stringify(dataObject.image_description) + ",'" + dataObject.class_name + 
-				"','" + dataObject.subject_name + "','" + dataObject.chapter_no + "'," + JSON.stringify(dataObject.chapter_name) + ",'" + dataObject.book_name + "')";
+				dataObject.image_title + "','" + dataObject.image_description + "','" + dataObject.class_name + 
+				"','" + dataObject.subject_name + "','" + dataObject.chapter_no + "','" + dataObject.chapter_name + "','" + dataObject.book_name + "')";
 				console.log("SQL::" + sql);
 
 				connection.query(sql, function (err, result) {

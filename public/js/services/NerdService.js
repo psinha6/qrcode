@@ -1,7 +1,9 @@
 angular.module('NerdService', []).service('Nerd', ['$http', function($http) {
 
      this.serverUrl = "";//"192.168.10.40:8080";
+     this.getCurrentAdminUserId =  "http://192.168.10.18/admin/getCurrentAdminUserId.app"
 	this.imageid;
+     this.userLoggedIn = true;
 	this.printImageId = function(){
 		console.log("From Service" + this.imageid);
 	}
@@ -11,7 +13,18 @@ angular.module('NerdService', []).service('Nerd', ['$http', function($http) {
      this.getImage = function(){
           return kjua(options);
      }
-     
+     this.isConnected = function(){
+          $http({
+              method: 'GET',
+              url: this.getCurrentAdminUserId
+            }).then(function successCallback(response) {
+               this.userLoggedIn = true;
+             }, function errorCallback(response) {
+               this.userLoggedIn = false;
+               //alert('Please login to continue' + JSON.stringify(response));
+               //window.location = "http://192.168.10.18/admin/home.htm"
+             });
+     }
      this.booktypes =  ["Demo","CBSE","ICSE","East Edition","South Edition"]
 	this.syllabusData = [
                     {"Syllabus": "1010853", "Subject": "English", "Class": "Nursery"},
@@ -62,5 +75,5 @@ angular.module('NerdService', []).service('Nerd', ['$http', function($http) {
                     {"Syllabus": "1010868", "Subject": "Hindi", "Class": "LKG"}
                 ];
     this.classNames = ['Grade1', 'Grade2', 'Grade3', 'Grade4', 'Grade5', 'Grade6', 'Grade7', 'Grade8'];
-    this.subjects = ["Hindi", "EVS", "Social_Studies", "Science", "Maths", "English", "Sanskrit"];
+    this.subjects = ["Hindi", "EVS", "Social-Studies", "Science", "Maths", "English", "Sanskrit"];
 }]);

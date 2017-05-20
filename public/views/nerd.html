@@ -26,7 +26,7 @@
 
 			<button class="btn btn-success pull-left clearBoth" ng-click="generateNewQR()">Create New</button>
 		</div>
-	    <table class="table table-striped">
+	    <table ng-show="className || syllabusNo" class="table table-striped">
 		    <thead>
 		    	<tr>
 		    		<th>ID</th>
@@ -64,7 +64,9 @@
 		    	</tr>
 		    </tbody>
 	    </table>
-
+	    <div ng-hide="className || syllabusNo" class="col-xs-5">
+	    <label class="control-label text-right">Please select Grade or Subject to view </label>
+	    </div>
 	</div>
   </div>
 </div>
